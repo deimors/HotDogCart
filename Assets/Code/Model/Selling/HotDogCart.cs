@@ -8,7 +8,7 @@ namespace Assets.Code.Model.Selling
 		private readonly TimeSpan _sellTime;
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 
-		private TimeSpan? _remainingTime;
+		private TimeSpan? _remainingSaleTime;
 
 		public HotDogCart(TimeSpan sellTime)
 		{
@@ -19,25 +19,36 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			if (_remainingTime.HasValue)
-				return;
-
-			_remainingTime = _sellTime;
+			if (!IsSaleActive)
+				StartSale();
 		}
-
+		
 		public void Wait(TimeSpan duration)
 		{
-			if (!_remainingTime.HasValue)
+			if (!IsSaleActive)
 				return;
 
-			_remainingTime -= duration;
+			ReduceRemainingSaleTime(duration);
 
-			if (_remainingTime > TimeSpan.Zero)
+			if (IsTimeRemainingInSale)
 				return;
 
-			_remainingTime = null;
+			CompleteSale();
 			
 			_events.OnNext(new HotDogInABunSoldEvent());
 		}
+		
+		private bool IsSaleActive => _remainingSaleTime.HasValue;
+
+		private bool IsTimeRemainingInSale => _remainingSaleTime > TimeSpan.Zero;
+
+		private void StartSale()
+			=> _remainingSaleTime = _sellTime;
+
+		private void CompleteSale()
+			=> _remainingSaleTime = null;
+
+		private void ReduceRemainingSaleTime(TimeSpan duration)
+			=> _remainingSaleTime -= duration;
 	}
 }
