@@ -6,7 +6,9 @@ namespace Assets.Code.Model.Selling
 	public class HotDogCart
 	{
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
-		
+
+		private bool _sold;
+
 		public HotDogCart(TimeSpan sellTime)
 		{
 			
@@ -16,12 +18,13 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			
+			_sold = true;
 		}
 
 		public void Wait(TimeSpan duration)
 		{
-			_events.OnNext(new HotDogInABunSoldEvent());
+			if (_sold)
+				_events.OnNext(new HotDogInABunSoldEvent());
 		}
 	}
 }
