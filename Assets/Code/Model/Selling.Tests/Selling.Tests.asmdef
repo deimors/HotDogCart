@@ -1,7 +1,11 @@
 {
-    "name": "Model",
-    "references": [],
-    "optionalUnityReferences": [],
+    "name": "Selling.Tests",
+    "references": [
+        "Selling"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
