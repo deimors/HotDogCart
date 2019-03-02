@@ -19,6 +19,9 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
+			if (_remainingTime.HasValue)
+				return;
+
 			_remainingTime = _sellTime;
 		}
 
