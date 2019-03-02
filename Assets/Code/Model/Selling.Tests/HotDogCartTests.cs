@@ -6,12 +6,16 @@ namespace Assets.Code.Model.Selling.Tests
 {
 	public class HotDogCartTestFixture
 	{
-		private readonly HotDogCart _pos;
-		private readonly IObserver<HotDogCartEvent> _observer = Substitute.For<IObserver<HotDogCartEvent>>();
+		private HotDogCart _pos;
+		private IObserver<HotDogCartEvent> _observer = Substitute.For<IObserver<HotDogCartEvent>>();
 
-		public HotDogCartTestFixture(TimeSpan sellTime)
+		protected TimeSpan SellTime { get; set; } = TimeSpan.FromMinutes(1);
+		
+		[SetUp]
+		public void Setup()
 		{
-			_pos = new HotDogCart(sellTime);
+			_pos = new HotDogCart(SellTime);
+			_observer = Substitute.For<IObserver<HotDogCartEvent>>();
 			_pos.Events.Subscribe(_observer);
 		}
 
@@ -30,12 +34,8 @@ namespace Assets.Code.Model.Selling.Tests
 
 	public class HotDogCartTests : HotDogCartTestFixture
 	{
-		public HotDogCartTests() : base(sellTime: TimeSpan.FromMinutes(1))
-		{
-		}
-
 		[Test]
-		public void SellHotDogInABunAndDontWait()
+		public void SellAndDontWait()
 		{
 			Act_Sell();
 
@@ -43,13 +43,21 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void SellHotDogInABunAndWaitOneMinute()
+		public void SellAndWaitOneMinute()
 		{
 			Act_Sell();
 
 			Act_Wait(TimeSpan.FromMinutes(1));
 
 			Assert_EventObserved(new HotDogInABunSoldEvent());
+		}
+
+		[Test]
+		public void DontSellAndWaitOneMinute()
+		{
+			Act_Wait(TimeSpan.FromMinutes(1));
+
+			Assert_EventNotObserved(new HotDogInABunSoldEvent());
 		}
 	}
 }
