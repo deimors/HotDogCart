@@ -10,7 +10,7 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			
+			_events.OnNext(new HotDogInABunSoldEvent());
 		}
 	}
 }
