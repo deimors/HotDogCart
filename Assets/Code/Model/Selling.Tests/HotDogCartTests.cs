@@ -28,6 +28,9 @@ namespace Assets.Code.Model.Selling.Tests
 		protected void Assert_EventObserved(HotDogCartEvent expected)
 			=> _observer.Received().OnNext(expected);
 
+		protected void Assert_EventObserved(HotDogCartEvent expected, int repetitions)
+			=> _observer.Received(repetitions).OnNext(expected);
+
 		protected void Assert_EventNotObserved(HotDogCartEvent prohibited)
 			=> _observer.DidNotReceive().OnNext(prohibited);
 	}
@@ -51,13 +54,25 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventObserved(new HotDogInABunSoldEvent());
 		}
-
+		
 		[Test]
 		public void DontSellAndWaitOneMinute()
 		{
 			Act_Wait(TimeSpan.FromMinutes(1));
 
 			Assert_EventNotObserved(new HotDogInABunSoldEvent());
+		}
+
+		[Test]
+		public void SellAndWaitOneMinuteTwice()
+		{
+			Act_Sell();
+
+			Act_Wait(TimeSpan.FromMinutes(1));
+
+			Act_Wait(TimeSpan.FromMinutes(1));
+
+			Assert_EventObserved(new HotDogInABunSoldEvent(), 1);
 		}
 	}
 }
