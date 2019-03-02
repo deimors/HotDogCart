@@ -23,8 +23,10 @@ namespace Assets.Code.Model.Selling
 
 		public void Wait(TimeSpan duration)
 		{
-			if (_sold)
-				_events.OnNext(new HotDogInABunSoldEvent());
+			if (!_sold) return;
+
+			_sold = false;
+			_events.OnNext(new HotDogInABunSoldEvent());
 		}
 	}
 }
