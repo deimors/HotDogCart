@@ -84,5 +84,19 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventNotObserved(new HotDogInABunSoldEvent());
 		}
+
+		[Test]
+		public void TryToSellWhenAlreadySelling()
+		{
+			Act_Sell();
+
+			Act_Wait(TimeSpan.FromSeconds(30));
+
+			Act_Sell();
+
+			Act_Wait(TimeSpan.FromSeconds(30));
+
+			Assert_EventObserved(new HotDogInABunSoldEvent());
+		}
 	}
 }
