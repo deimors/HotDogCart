@@ -74,5 +74,15 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventObserved(new HotDogInABunSoldEvent(), 1);
 		}
+
+		[Test]
+		public void SellAndWaitHalfAMinute()
+		{
+			Act_Sell();
+
+			Act_Wait(TimeSpan.FromSeconds(30));
+
+			Assert_EventNotObserved(new HotDogInABunSoldEvent());
+		}
 	}
 }
