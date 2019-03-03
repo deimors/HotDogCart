@@ -20,7 +20,7 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			if (IsSaleActive)
+			if (IsSaleActive || !_customerWaiting)
 				return;
 
 			StartSale();

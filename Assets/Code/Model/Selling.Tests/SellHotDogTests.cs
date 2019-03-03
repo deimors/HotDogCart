@@ -8,6 +8,8 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndDontProgressTime()
 		{
+			Act_AddWaitingCustomer();
+
 			Act_Sell();
 
 			Assert_EventObserved(new SaleStartedEvent());
@@ -17,6 +19,8 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinute()
 		{
+			Act_AddWaitingCustomer();
+
 			Act_Sell();
 
 			var duration = TimeSpan.FromMinutes(1);
@@ -32,6 +36,8 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void DontSellAndProgressTimeOneMinute()
 		{
+			Act_AddWaitingCustomer();
+
 			var duration = TimeSpan.FromMinutes(1);
 			Act_ProgressTime(duration);
 
@@ -42,6 +48,8 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinuteTwice()
 		{
+			Act_AddWaitingCustomer();
+
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
@@ -54,6 +62,8 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinute()
 		{
+			Act_AddWaitingCustomer();
+
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromSeconds(30));
@@ -64,9 +74,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellWhenAlreadySelling()
 		{
+			Act_AddWaitingCustomer();
+
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromSeconds(30));
+
+			Act_AddWaitingCustomer();
 
 			Act_Sell();
 
@@ -79,6 +93,8 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinuteTwice()
 		{
+			Act_AddWaitingCustomer();
+
 			Act_Sell();
 
 			var halfMinute = TimeSpan.FromSeconds(30);
@@ -92,6 +108,14 @@ namespace Assets.Code.Model.Selling.Tests
 				new SaleProgressedEvent(1.0f),
 				new HotDogSoldEvent()
 			);
+		}
+
+		[Test]
+		public void SellWithoutWaitingCustomer()
+		{
+			Act_Sell();
+
+			Assert_EventNotObserved(new SaleStartedEvent());
 		}
 	}
 }
