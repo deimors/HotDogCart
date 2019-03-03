@@ -69,8 +69,10 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void DontSellAndProgressTimeOneMinute()
 		{
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			var duration = TimeSpan.FromMinutes(1);
+			Act_ProgressTime(duration);
 
+			Assert_EventObserved(new TimeProgressedEvent(duration));
 			Assert_EventNotObserved(new HotDogInABunSoldEvent());
 		}
 
