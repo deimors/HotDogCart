@@ -29,11 +29,13 @@ namespace Assets.Code.Model.Selling
 		public void ProgressTime(TimeSpan duration)
 		{
 			_events.OnNext(new TimeProgressedEvent(TimeSpan.FromMinutes(1)));
-
+			
 			if (!IsSaleActive)
 				return;
 
 			ReduceRemainingSaleTime(duration);
+
+			_events.OnNext(new SaleProgressedEvent(Progress));
 
 			if (IsTimeRemainingInSale)
 				return;
@@ -55,5 +57,10 @@ namespace Assets.Code.Model.Selling
 
 		private void ReduceRemainingSaleTime(TimeSpan duration)
 			=> _remainingSaleTime -= duration;
+
+		private float Progress
+			=> _remainingSaleTime.HasValue 
+				? 1f - (float)(_remainingSaleTime.Value.TotalMilliseconds / _sellTime.TotalMilliseconds) 
+				: 0;
 	}
 }
