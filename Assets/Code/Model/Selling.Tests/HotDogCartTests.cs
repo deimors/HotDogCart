@@ -33,6 +33,13 @@ namespace Assets.Code.Model.Selling.Tests
 
 		protected void Assert_EventNotObserved(HotDogCartEvent prohibited)
 			=> _observer.DidNotReceive().OnNext(prohibited);
+
+		protected void Assert_EventsObserved(params HotDogCartEvent[] expected)
+			=> Received.InOrder(() =>
+			{
+				foreach (var expectedEvent in expected)
+					_observer.Received().OnNext(expectedEvent);
+			});
 	}
 
 	public class HotDogCartTests : HotDogCartTestFixture
@@ -50,9 +57,13 @@ namespace Assets.Code.Model.Selling.Tests
 		{
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			var duration = TimeSpan.FromMinutes(1);
+			Act_ProgressTime(duration);
 
-			Assert_EventObserved(new HotDogInABunSoldEvent());
+			Assert_EventsObserved(
+				new TimeProgressedEvent(duration),
+				new HotDogInABunSoldEvent()
+			);
 		}
 		
 		[Test]
