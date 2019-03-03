@@ -49,6 +49,7 @@ namespace Assets.Code.Model.Selling.Tests
 		{
 			Act_Sell();
 
+			Assert_EventObserved(new SaleStartedEvent());
 			Assert_EventNotObserved(new HotDogInABunSoldEvent());
 		}
 
@@ -61,6 +62,7 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_ProgressTime(duration);
 
 			Assert_EventsObserved(
+				new SaleStartedEvent(),
 				new TimeProgressedEvent(duration),
 				new HotDogInABunSoldEvent()
 			);
