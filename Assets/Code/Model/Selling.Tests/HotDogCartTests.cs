@@ -114,5 +114,23 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventObserved(new SaleStartedEvent(), 1);
 			Assert_EventObserved(new HotDogInABunSoldEvent());
 		}
+
+		[Test]
+		public void SellAndProgressTimeHalfAMinuteTwice()
+		{
+			Act_Sell();
+
+			var halfMinute = TimeSpan.FromSeconds(30);
+
+			Act_ProgressTime(halfMinute);
+			Act_ProgressTime(halfMinute);
+
+			Assert_EventsObserved(
+				new SaleStartedEvent(),
+				new SaleProgressedEvent(0.5f),
+				new SaleProgressedEvent(1.0f),
+				new HotDogInABunSoldEvent()
+			);
+		}
 	}
 }
