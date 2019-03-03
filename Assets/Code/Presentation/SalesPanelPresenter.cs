@@ -15,7 +15,7 @@ namespace Assets.Code.Presentation
 		{
 			cart.Events
 				.OfType<HotDogCartEvent, HotDogInABunSoldEvent>()
-				.Subscribe(e => SalesText.text += "Sold\n");
+				.Subscribe(e => SalesText.text += "Hot Dog Sold\n");
 		}
 	}
 }
