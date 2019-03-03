@@ -19,10 +19,11 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			_events.OnNext(new SaleStartedEvent());
+			if (IsSaleActive)
+				return;
 
-			if (!IsSaleActive)
-				StartSale();
+			StartSale();
+			_events.OnNext(new SaleStartedEvent());
 		}
 		
 		public void ProgressTime(TimeSpan duration)
