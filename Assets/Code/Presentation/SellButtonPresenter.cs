@@ -27,7 +27,7 @@ namespace Assets.Code.Presentation
 				.Subscribe(_ => OnSaleStarted());
 
 			Cart.Events
-				.OfType<HotDogCartEvent, HotDogInABunSoldEvent>()
+				.OfType<HotDogCartEvent, HotDogSoldEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => OnSold());
 

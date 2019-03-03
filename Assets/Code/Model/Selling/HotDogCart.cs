@@ -42,7 +42,7 @@ namespace Assets.Code.Model.Selling
 
 			CompleteSale();
 			
-			_events.OnNext(new HotDogInABunSoldEvent());
+			_events.OnNext(new HotDogSoldEvent());
 		}
 		
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
