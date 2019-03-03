@@ -1,9 +1,16 @@
-﻿using Zenject;
+﻿using System;
+using Assets.Code.Model.Selling;
+using Zenject;
 
 namespace Assets.Code.Infrastructure
 {
 	public class SceneInstaller : MonoInstaller
 	{
-		
+		public override void InstallBindings()
+		{
+			Container.Bind<HotDogCart>().AsSingle().WithArguments(TimeSpan.FromMinutes(1)).NonLazy();
+
+			Container.Bind<HotDogCartTimePump>().AsSingle().NonLazy();
+		}
 	}
 }

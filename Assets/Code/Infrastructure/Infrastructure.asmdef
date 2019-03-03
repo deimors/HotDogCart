@@ -3,7 +3,8 @@
     "references": [
         "Presentation",
         "Selling",
-        "Zenject"
+        "Zenject",
+        "UniRx"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
