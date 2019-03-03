@@ -47,7 +47,7 @@ namespace Assets.Code.Model.Selling
 
 		public void AddWaitingCustomer()
 		{
-
+			_events.OnNext(new CustomerStartedWaitingEvent());
 		}
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
