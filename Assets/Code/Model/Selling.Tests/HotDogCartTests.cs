@@ -111,6 +111,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
+			Assert_EventObserved(new SaleStartedEvent(), 1);
 			Assert_EventObserved(new HotDogInABunSoldEvent());
 		}
 	}
