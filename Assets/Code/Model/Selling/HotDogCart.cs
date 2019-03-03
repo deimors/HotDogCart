@@ -9,6 +9,7 @@ namespace Assets.Code.Model.Selling
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 
 		private TimeSpan? _remainingSaleTime;
+		private bool _customerWaiting;
 
 		public HotDogCart(TimeSpan sellTime)
 		{
@@ -47,7 +48,15 @@ namespace Assets.Code.Model.Selling
 
 		public void AddWaitingCustomer()
 		{
-			_events.OnNext(new CustomerStartedWaitingEvent());
+			if (!_customerWaiting)
+			{
+				_customerWaiting = true;
+				_events.OnNext(new CustomerStartedWaitingEvent());
+			}
+			else
+			{
+				_events.OnNext(new CustomerWalkedAwayEvent());
+			}
 		}
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
