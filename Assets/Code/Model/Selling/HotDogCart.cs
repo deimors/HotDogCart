@@ -44,7 +44,12 @@ namespace Assets.Code.Model.Selling
 			
 			_events.OnNext(new HotDogSoldEvent());
 		}
-		
+
+		public void AddWaitingCustomer()
+		{
+
+		}
+
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
 
 		private bool IsTimeRemainingInSale => _remainingSaleTime > TimeSpan.Zero;

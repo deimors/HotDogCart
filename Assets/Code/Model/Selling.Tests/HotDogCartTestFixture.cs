@@ -25,6 +25,9 @@ namespace Assets.Code.Model.Selling.Tests
 		protected void Act_ProgressTime(TimeSpan duration)
 			=> _pos.ProgressTime(duration);
 
+		protected void Act_AddWaitingCustomer()
+			=> _pos.AddWaitingCustomer();
+
 		protected void Assert_EventObserved(HotDogCartEvent expected)
 			=> _observer.Received().OnNext(expected);
 
@@ -39,6 +42,6 @@ namespace Assets.Code.Model.Selling.Tests
 			{
 				foreach (var expectedEvent in expected)
 					_observer.Received().OnNext(expectedEvent);
-			});
+			});	
 	}
 }
