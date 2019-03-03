@@ -22,8 +22,8 @@ namespace Assets.Code.Model.Selling.Tests
 		protected void Act_Sell()
 			=> _pos.Sell();
 
-		protected void Act_Wait(TimeSpan duration)
-			=> _pos.Wait(duration);
+		protected void Act_ProgressTime(TimeSpan duration)
+			=> _pos.ProgressTime(duration);
 
 		protected void Assert_EventObserved(HotDogCartEvent expected)
 			=> _observer.Received().OnNext(expected);
@@ -38,7 +38,7 @@ namespace Assets.Code.Model.Selling.Tests
 	public class HotDogCartTests : HotDogCartTestFixture
 	{
 		[Test]
-		public void SellAndDontWait()
+		public void SellAndDontProgressTime()
 		{
 			Act_Sell();
 
@@ -46,55 +46,55 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void SellAndWaitOneMinute()
+		public void SellAndProgressTimeOneMinute()
 		{
 			Act_Sell();
 
-			Act_Wait(TimeSpan.FromMinutes(1));
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
 			Assert_EventObserved(new HotDogInABunSoldEvent());
 		}
 		
 		[Test]
-		public void DontSellAndWaitOneMinute()
+		public void DontSellAndProgressTimeOneMinute()
 		{
-			Act_Wait(TimeSpan.FromMinutes(1));
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
 			Assert_EventNotObserved(new HotDogInABunSoldEvent());
 		}
 
 		[Test]
-		public void SellAndWaitOneMinuteTwice()
+		public void SellAndProgressTimeOneMinuteTwice()
 		{
 			Act_Sell();
 
-			Act_Wait(TimeSpan.FromMinutes(1));
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
-			Act_Wait(TimeSpan.FromMinutes(1));
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
 			Assert_EventObserved(new HotDogInABunSoldEvent(), 1);
 		}
 
 		[Test]
-		public void SellAndWaitHalfAMinute()
+		public void SellAndProgressTimeHalfAMinute()
 		{
 			Act_Sell();
 
-			Act_Wait(TimeSpan.FromSeconds(30));
+			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
 			Assert_EventNotObserved(new HotDogInABunSoldEvent());
 		}
 
 		[Test]
-		public void TryToSellWhenAlreadySelling()
+		public void SellWhenAlreadySelling()
 		{
 			Act_Sell();
 
-			Act_Wait(TimeSpan.FromSeconds(30));
+			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
 			Act_Sell();
 
-			Act_Wait(TimeSpan.FromSeconds(30));
+			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
 			Assert_EventObserved(new HotDogInABunSoldEvent());
 		}

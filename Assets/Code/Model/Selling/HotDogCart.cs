@@ -23,7 +23,7 @@ namespace Assets.Code.Model.Selling
 				StartSale();
 		}
 		
-		public void Wait(TimeSpan duration)
+		public void ProgressTime(TimeSpan duration)
 		{
 			if (!IsSaleActive)
 				return;
