@@ -117,5 +117,22 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventNotObserved(new SaleStartedEvent());
 		}
+
+		[Test]
+		public void SellToWaitingCustomerThenTryToSellAgain()
+		{
+			Act_AddWaitingCustomer();
+
+			Act_Sell();
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+
+			Act_Sell();
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+
+			Assert_EventObserved(new SaleStartedEvent(), 1);
+			Assert_EventObserved(new HotDogSoldEvent(), 1);
+		}
 	}
 }
