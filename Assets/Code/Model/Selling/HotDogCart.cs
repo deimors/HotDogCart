@@ -64,7 +64,10 @@ namespace Assets.Code.Model.Selling
 		private bool IsTimeRemainingInSale => _remainingSaleTime > TimeSpan.Zero;
 
 		private void StartSale()
-			=> _remainingSaleTime = _sellTime;
+		{
+			_remainingSaleTime = _sellTime;
+			_customerWaiting = false;
+		}
 
 		private void CompleteSale()
 			=> _remainingSaleTime = null;
