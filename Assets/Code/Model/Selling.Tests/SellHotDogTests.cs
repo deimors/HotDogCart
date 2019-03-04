@@ -134,5 +134,51 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventObserved(new SaleStartedEvent(), 1);
 			Assert_EventObserved(new HotDogSoldEvent(), 1);
 		}
+
+		[Test]
+		public void SellToWaitingCustomerTwice()
+		{
+			Act_AddWaitingCustomer();
+
+			Act_Sell();
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+
+			Act_AddWaitingCustomer();
+
+			Act_Sell();
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+
+			Assert_EventsObserved(
+				new SaleStartedEvent(),
+				new HotDogSoldEvent(),
+				new SaleStartedEvent(),
+				new HotDogSoldEvent()
+			);
+		}
+
+		[Test]
+		public void SellToWaitingCustomerTwiceWhenSecondCustomerWaitingDuringSell()
+		{
+			Act_AddWaitingCustomer();
+
+			Act_Sell();
+
+			Act_AddWaitingCustomer();
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			
+			Act_Sell();
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+
+			Assert_EventsObserved(
+				new SaleStartedEvent(),
+				new HotDogSoldEvent(),
+				new SaleStartedEvent(),
+				new HotDogSoldEvent()
+			);
+		}
 	}
 }
