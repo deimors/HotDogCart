@@ -12,6 +12,7 @@ namespace Assets.Code.Presentation
 		public Button SellButton;
 
 		public Slider ProgressSlider;
+		private bool _waiting;
 
 		[Inject]
 		public HotDogCart Cart { private get; set; }
@@ -20,6 +21,12 @@ namespace Assets.Code.Presentation
 		public void Initialize()
 		{
 			HideProgressSlider();
+			DisableSellButton();
+
+			Cart.Events
+				.OfType<HotDogCartEvent, CustomerStartedWaitingEvent>()
+				.TakeUntilDestroy(gameObject)
+				.Subscribe(_ => OnCustomerWaiting());
 
 			Cart.Events
 				.OfType<HotDogCartEvent, SaleStartedEvent>()
@@ -39,18 +46,30 @@ namespace Assets.Code.Presentation
 
 		public void OnPointerClick(PointerEventData eventData)
 		{
-			Cart.Sell();
+			if (SellButton.interactable)
+				Cart.Sell();
+		}
+
+		private void OnCustomerWaiting()
+		{
+			_waiting = true;
+
+			if (!ProgressSlider.gameObject.activeSelf)
+				EnableSellButton();
 		}
 		
 		private void OnSaleStarted()
 		{
+			_waiting = false;
 			DisableSellButton();
 			ShowProgressSlider();
 		}
 		
 		private void OnSold()
 		{
-			EnableSellButton();
+			if (_waiting)
+				EnableSellButton();
+
 			HideProgressSlider();
 		}
 
