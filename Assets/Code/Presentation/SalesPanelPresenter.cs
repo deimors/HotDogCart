@@ -11,11 +11,21 @@ namespace Assets.Code.Presentation
 		public Text SalesText;
 
 		[Inject]
-		public void Initialize(HotDogCart cart)
+		public HotDogCart Cart { private get; set; }
+
+		[Inject]
+		public void Initialize()
 		{
-			cart.Events
-				.OfType<HotDogCartEvent, HotDogSoldEvent>()
-				.Subscribe(e => SalesText.text += "Hot Dog Sold\n");
+			LogOnEvent<HotDogSoldEvent>("Hot Dog Sold");
+
+			LogOnEvent<CustomerStartedWaitingEvent>("Customer Waiting");
+
+			LogOnEvent<PotentialCustomerWalkedAwayEvent>("Potential Customer Walked Away");
 		}
+
+		private void LogOnEvent<TEvent>(string message) where TEvent : HotDogCartEvent
+			=> Cart.Events
+				.OfType<HotDogCartEvent, TEvent>()
+				.Subscribe(_ => SalesText.text += message + "\n");
 	}
 }

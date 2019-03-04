@@ -55,7 +55,7 @@ namespace Assets.Code.Model.Selling
 			}
 			else
 			{
-				_events.OnNext(new CustomerWalkedAwayEvent());
+				_events.OnNext(new PotentialCustomerWalkedAwayEvent());
 			}
 		}
 
