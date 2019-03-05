@@ -1,11 +1,9 @@
 {
-    "name": "Infrastructure",
+    "name": "Integration",
     "references": [
-        "Integration",
-        "Presentation",
         "Selling",
-        "Zenject",
-        "UniRx"
+        "UniRx",
+        "Zenject"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
