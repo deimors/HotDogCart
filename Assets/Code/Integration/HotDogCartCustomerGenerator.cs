@@ -10,7 +10,7 @@ namespace Assets.Code.Infrastructure
 	{
 		[Inject]
 		public void Initialize(HotDogCart cart)
-			=> Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
+			=> Observable.Timer(TimeSpan.FromSeconds(0.5), TimeSpan.FromSeconds(0.5))
 				.Select(_ => UnityEngine.Random.Range(0f, 1f))
 				.Where(randomValue => randomValue < 0.2f)
 				.Subscribe(_ => cart.AddWaitingCustomer());
