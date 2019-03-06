@@ -1,4 +1,5 @@
-﻿using Assets.Code.Model.Selling;
+﻿using System;
+using Assets.Code.Model.Selling;
 using UnityEngine;
 using Zenject;
 using UniRx;
@@ -6,9 +7,10 @@ using UnityEngine.UI;
 
 namespace Assets.Code.Presentation
 {
-	public class SalesPanelPresenter : MonoBehaviour
+	public class ConsolePanelPresenter : MonoBehaviour
 	{
-		public Text SalesText;
+		public Text LogText;
+		public ScrollRect Scroll;
 
 		[Inject]
 		public HotDogCart Cart { private get; set; }
@@ -26,6 +28,10 @@ namespace Assets.Code.Presentation
 		private void LogOnEvent<TEvent>(string message) where TEvent : HotDogCartEvent
 			=> Cart.Events
 				.OfType<HotDogCartEvent, TEvent>()
-				.Subscribe(_ => SalesText.text += message + "\n");
+				.Select(_ => Math.Abs(Scroll.verticalNormalizedPosition) < Mathf.Epsilon)
+				.Do(_ => LogText.text += LogText.text == string.Empty ? message : "\n" + message)
+				.DelayFrame(1)
+				.Where(atScrollEnd => atScrollEnd)
+				.Subscribe(_ => Scroll.verticalNormalizedPosition = 0);
 	}
 }
