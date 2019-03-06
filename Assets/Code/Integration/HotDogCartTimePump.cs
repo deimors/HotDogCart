@@ -4,7 +4,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Assets.Code.Infrastructure
+namespace Assets.Code.Integration
 {
 	public class HotDogCartTimePump
 	{
