@@ -1,7 +1,8 @@
 {
     "name": "Selling.Tests",
     "references": [
-        "Selling"
+        "Selling",
+        "UniRx"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"

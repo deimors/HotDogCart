@@ -5,15 +5,21 @@ namespace Assets.Code.Model.Selling
 {
 	public class HotDogCart
 	{
+		private readonly IObservable<CustomersEvent> _customersEvents;
 		private readonly TimeSpan _sellTime;
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 
 		private TimeSpan? _remainingSaleTime;
 		private bool _customerWaiting;
 
-		public HotDogCart(TimeSpan sellTime)
+		public HotDogCart(IObservable<CustomersEvent> customersEvents, TimeSpan sellTime)
 		{
+			_customersEvents = customersEvents;
 			_sellTime = sellTime;
+
+			_customersEvents
+				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
+				.Subscribe(_ => _customerWaiting = true);
 		}
 
 		public IObservable<HotDogCartEvent> Events => _events;
@@ -44,19 +50,6 @@ namespace Assets.Code.Model.Selling
 			CompleteSale();
 			
 			_events.OnNext(new HotDogSoldEvent());
-		}
-
-		public void AddWaitingCustomer()
-		{
-			if (!_customerWaiting)
-			{
-				_customerWaiting = true;
-				_events.OnNext(new CustomerStartedWaitingEvent());
-			}
-			else
-			{
-				_events.OnNext(new PotentialCustomerWalkedAwayEvent());
-			}
 		}
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;

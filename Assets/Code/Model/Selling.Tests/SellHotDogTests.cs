@@ -8,7 +8,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndDontProgressTime()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -19,7 +19,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinute()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -36,7 +36,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void DontSellAndProgressTimeOneMinute()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			var duration = TimeSpan.FromMinutes(1);
 			Act_ProgressTime(duration);
@@ -48,7 +48,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinuteTwice()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -62,7 +62,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinute()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -74,13 +74,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellWhenAlreadySelling()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -93,7 +93,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinuteTwice()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -121,7 +121,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerThenTryToSellAgain()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -138,13 +138,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerTwice()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
@@ -161,11 +161,11 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerTwiceWhenSecondCustomerWaitingDuringSell()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_Sell();
 
-			Act_AddWaitingCustomer();
+			Arrange_CustomerStartedWaiting();
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 			
