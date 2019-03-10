@@ -1,4 +1,5 @@
-﻿using Assets.Code.Model.Selling;
+﻿using System;
+using Assets.Code.Model.Selling;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,13 +19,16 @@ namespace Assets.Code.Presentation
 		public HotDogCart Cart { private get; set; }
 
 		[Inject]
+		public IObservable<CustomersEvent> CustomersEvents { private get; set; }
+
+		[Inject]
 		public void Initialize()
 		{
 			HideProgressSlider();
 			DisableSellButton();
 
-			Cart.Events
-				.OfType<HotDogCartEvent, CustomerStartedWaitingEvent>()
+			CustomersEvents
+				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => OnCustomerWaiting());
 

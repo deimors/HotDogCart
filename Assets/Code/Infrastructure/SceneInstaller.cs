@@ -9,7 +9,13 @@ namespace Assets.Code.Infrastructure
 	{
 		public override void InstallBindings()
 		{
+			Container.Bind<Customers>().AsSingle().NonLazy();
+			
 			Container.Bind<HotDogCart>().AsSingle().WithArguments(TimeSpan.FromMinutes(1)).NonLazy();
+
+			Container.Bind<IObservable<CustomersEvent>>()
+				.FromMethod(context => context.Container.Resolve<Customers>().Events)
+				.AsSingle();
 
 			Container.Bind<HotDogCartTimePump>().AsSingle().NonLazy();
 
