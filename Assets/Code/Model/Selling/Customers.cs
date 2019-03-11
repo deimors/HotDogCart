@@ -20,9 +20,9 @@ namespace Assets.Code.Model.Selling
 		{
 			_cartEvents
 				.OfType<HotDogCartEvent, SaleStartedEvent>()
-				.Subscribe(_ => _customerWaiting = false);
+				.Subscribe(_ => RemoveWaitingCustomer());
 		}
-
+		
 		public void AddWaitingCustomer()
 		{
 			if (!_customerWaiting)
@@ -34,6 +34,12 @@ namespace Assets.Code.Model.Selling
 			{
 				_events.OnNext(new PotentialCustomerWalkedAwayEvent());
 			}
+		}
+
+		private void RemoveWaitingCustomer()
+		{
+			_customerWaiting = false;
+			_events.OnNext(new NoWaitingCustomerEvent());
 		}
 	}
 }
