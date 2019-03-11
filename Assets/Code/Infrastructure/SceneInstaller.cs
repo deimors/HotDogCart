@@ -20,6 +20,8 @@ namespace Assets.Code.Infrastructure
 			Container.Bind<HotDogCartTimePump>().AsSingle().NonLazy();
 
 			Container.Bind<HotDogCartCustomerGenerator>().AsSingle().NonLazy();
+
+			Container.Bind<IInitializable>().To<CartToCustomersBinding>().AsSingle();
 		}
 	}
 }

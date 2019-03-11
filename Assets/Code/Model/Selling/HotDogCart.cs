@@ -5,16 +5,16 @@ namespace Assets.Code.Model.Selling
 {
 	public class HotDogCart
 	{
-		private readonly IObservable<CustomersEvent> _customersEvents;
 		private readonly TimeSpan _sellTime;
-		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 
+		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
+		private readonly ISubject<CustomersEvent> _customersEvents = new Subject<CustomersEvent>();
+		
 		private TimeSpan? _remainingSaleTime;
 		private bool _customerWaiting;
 
-		public HotDogCart(IObservable<CustomersEvent> customersEvents, TimeSpan sellTime)
+		public HotDogCart(TimeSpan sellTime)
 		{
-			_customersEvents = customersEvents;
 			_sellTime = sellTime;
 
 			_customersEvents
@@ -23,6 +23,8 @@ namespace Assets.Code.Model.Selling
 		}
 
 		public IObservable<HotDogCartEvent> Events => _events;
+
+		public IObserver<CustomersEvent> CustomersObserver => _customersEvents;
 
 		public void Sell()
 		{

@@ -7,11 +7,21 @@ namespace Assets.Code.Model.Selling
 	{
 		private readonly TimeSpan _sellTime;
 		private readonly ISubject<CustomersEvent> _events = new Subject<CustomersEvent>();
+		private readonly ISubject<HotDogCartEvent> _cartEvents = new Subject<HotDogCartEvent>();
 
 		private TimeSpan? _remainingSaleTime;
 		private bool _customerWaiting;
 
 		public IObservable<CustomersEvent> Events => _events;
+
+		public IObserver<HotDogCartEvent> CartObserver => _cartEvents;
+
+		public Customers()
+		{
+			_cartEvents
+				.OfType<HotDogCartEvent, SaleStartedEvent>()
+				.Subscribe(_ => _customerWaiting = false);
+		}
 
 		public void AddWaitingCustomer()
 		{

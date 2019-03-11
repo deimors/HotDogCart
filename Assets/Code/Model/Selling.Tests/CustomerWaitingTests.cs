@@ -17,6 +17,9 @@ namespace Assets.Code.Model.Selling.Tests
 
 		protected override IObservable<CustomersEvent> Observable => _customers.Events;
 
+		protected void Arrange_SaleStarted()
+			=> _customers.CartObserver.OnNext(new SaleStartedEvent());
+
 		protected void Act_AddWaitingCustomer()
 			=> _customers.AddWaitingCustomer();
 	}
@@ -41,6 +44,21 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventsObserved(
 				new CustomerStartedWaitingEvent(),
 				new PotentialCustomerWalkedAwayEvent()
+			);
+		}
+
+		[Test]
+		public void AddWaitingCustomerThenSaleStartedThenAddAnotherWaitingCustomer()
+		{
+			Act_AddWaitingCustomer();
+
+			Arrange_SaleStarted();
+
+			Act_AddWaitingCustomer();
+
+			Assert_EventsObserved(
+				new CustomerStartedWaitingEvent(),
+				new CustomerStartedWaitingEvent()
 			);
 		}
 	}
