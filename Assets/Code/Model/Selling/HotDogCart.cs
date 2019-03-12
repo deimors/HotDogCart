@@ -20,6 +20,10 @@ namespace Assets.Code.Model.Selling
 			_customersEvents
 				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
 				.Subscribe(_ => _customerWaiting = true);
+
+			_customersEvents
+				.OfType<CustomersEvent, NoWaitingCustomerEvent>()
+				.Subscribe(_ => _customerWaiting = false);
 		}
 
 		public IObservable<HotDogCartEvent> Events => _events;
@@ -61,7 +65,6 @@ namespace Assets.Code.Model.Selling
 		private void StartSale()
 		{
 			_remainingSaleTime = _sellTime;
-			_customerWaiting = false;
 		}
 
 		private void CompleteSale()

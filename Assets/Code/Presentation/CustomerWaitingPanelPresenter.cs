@@ -13,7 +13,7 @@ namespace Assets.Code.Presentation
 		public Text CustomerText;
 		
 		[Inject]
-		public void Initialize(HotDogCart cart, Customers customers)
+		public void Initialize(Customers customers)
 		{
 			ClearCustomerWaiting();
 
@@ -22,8 +22,8 @@ namespace Assets.Code.Presentation
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ShowCustomerWaiting());
 
-			cart.Events
-				.OfType<HotDogCartEvent, SaleStartedEvent>()
+			customers.Events
+				.OfType<CustomersEvent, NoWaitingCustomerEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ClearCustomerWaiting());
 
