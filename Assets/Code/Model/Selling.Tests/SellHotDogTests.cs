@@ -8,7 +8,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndDontProgressTime()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -19,7 +19,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinute()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -36,7 +36,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void DontSellAndProgressTimeOneMinute()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			var duration = TimeSpan.FromMinutes(1);
 			Act_ProgressTime(duration);
@@ -48,7 +48,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinuteTwice()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -62,7 +62,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinute()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -74,13 +74,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellWhenAlreadySelling()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -93,7 +93,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinuteTwice()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -121,9 +121,11 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerThenTryToSellAgain()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
+
+			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
@@ -138,13 +140,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerTwice()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -161,11 +163,11 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerTwiceWhenSecondCustomerWaitingDuringSell()
 		{
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
-			Arrange_CustomerStartedWaiting();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 			

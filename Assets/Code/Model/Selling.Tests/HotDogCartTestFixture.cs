@@ -19,8 +19,8 @@ namespace Assets.Code.Model.Selling.Tests
 
 		protected override IObservable<HotDogCartEvent> Observable => _pos.Events;
 
-		protected void Arrange_CustomerStartedWaiting()
-			=> _pos.CustomersObserver.OnNext(new CustomerStartedWaitingEvent());
+		protected void Arrange_CustomersEvent(CustomersEvent customersEvent)
+			=> _pos.CustomersObserver.OnNext(customersEvent);
 
 		protected void Act_Sell()
 			=> _pos.Sell();
