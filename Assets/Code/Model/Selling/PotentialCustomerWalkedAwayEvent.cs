@@ -2,7 +2,7 @@
 
 namespace Assets.Code.Model.Selling
 {
-	public class PotentialCustomerWalkedAwayEvent : HotDogCartEvent, IEquatable<PotentialCustomerWalkedAwayEvent>
+	public class PotentialCustomerWalkedAwayEvent : CustomersEvent, IEquatable<PotentialCustomerWalkedAwayEvent>
 	{
 		public bool Equals(PotentialCustomerWalkedAwayEvent other)
 			=> !(other is null);

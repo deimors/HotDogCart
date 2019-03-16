@@ -1,4 +1,5 @@
-﻿using Assets.Code.Model.Selling;
+﻿using System;
+using Assets.Code.Model.Selling;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,61 +17,34 @@ namespace Assets.Code.Presentation
 
 		[Inject]
 		public HotDogCart Cart { private get; set; }
-
+		
 		[Inject]
 		public void Initialize()
 		{
 			HideProgressSlider();
 			DisableSellButton();
 
-			Cart.Events
-				.OfType<HotDogCartEvent, CustomerStartedWaitingEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(_ => OnCustomerWaiting());
+			OnCartEvent<CanSellHotDogEvent>(_ => EnableSellButton());
 
-			Cart.Events
-				.OfType<HotDogCartEvent, SaleStartedEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(_ => OnSaleStarted());
+			OnCartEvent<CantSellHotDogEvent>(_ => DisableSellButton());
 
-			Cart.Events
-				.OfType<HotDogCartEvent, HotDogSoldEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(_ => OnSold());
+			OnCartEvent<SaleStartedEvent>(_ => ShowProgressSlider());
 
-			Cart.Events
-				.OfType<HotDogCartEvent, SaleProgressedEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(e => ProgressSlider.value = e.Progress);
+			OnCartEvent<HotDogSoldEvent>(_ => HideProgressSlider());
+
+			OnCartEvent<SaleProgressedEvent>(e => ProgressSlider.value = e.Progress);
 		}
+
+		private void OnCartEvent<TEvent>(Action<TEvent> action) where TEvent : HotDogCartEvent
+			=> Cart.Events
+				.OfType<HotDogCartEvent, TEvent>()
+				.TakeUntilDestroy(gameObject)
+				.Subscribe(action);
 
 		public void OnPointerClick(PointerEventData eventData)
 		{
 			if (SellButton.interactable)
 				Cart.Sell();
-		}
-
-		private void OnCustomerWaiting()
-		{
-			_waiting = true;
-
-			if (!ProgressSlider.gameObject.activeSelf)
-				EnableSellButton();
-		}
-		
-		private void OnSaleStarted()
-		{
-			_waiting = false;
-			DisableSellButton();
-			ShowProgressSlider();
-		}
-		
-		private void OnSold()
-		{
-			if (_waiting)
-				EnableSellButton();
-
-			HideProgressSlider();
 		}
 
 		private void EnableSellButton()

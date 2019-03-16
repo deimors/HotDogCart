@@ -8,7 +8,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndDontProgressTime()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -19,7 +19,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinute()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -27,16 +27,19 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_ProgressTime(duration);
 
 			Assert_EventsObserved(
+				new CanSellHotDogEvent(),
 				new SaleStartedEvent(),
+				new CantSellHotDogEvent(),
 				new TimeProgressedEvent(duration),
-				new HotDogSoldEvent()
+				new HotDogSoldEvent(),
+				new CanSellHotDogEvent()
 			);
 		}
 		
 		[Test]
 		public void DontSellAndProgressTimeOneMinute()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			var duration = TimeSpan.FromMinutes(1);
 			Act_ProgressTime(duration);
@@ -48,7 +51,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeOneMinuteTwice()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -62,7 +65,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinute()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -74,13 +77,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellWhenAlreadySelling()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromSeconds(30));
 
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -93,7 +96,7 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellAndProgressTimeHalfAMinuteTwice()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -121,9 +124,11 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerThenTryToSellAgain()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
+
+			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
@@ -138,13 +143,13 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerTwice()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
@@ -161,11 +166,11 @@ namespace Assets.Code.Model.Selling.Tests
 		[Test]
 		public void SellToWaitingCustomerTwiceWhenSecondCustomerWaitingDuringSell()
 		{
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_Sell();
 
-			Act_AddWaitingCustomer();
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 			
@@ -178,6 +183,42 @@ namespace Assets.Code.Model.Selling.Tests
 				new HotDogSoldEvent(),
 				new SaleStartedEvent(),
 				new HotDogSoldEvent()
+			);
+		}
+
+		[Test]
+		public void CustomerArrivesDuringSale()
+		{
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
+
+			Act_Sell();
+
+			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
+
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
+			
+			Assert_EventObserved(new CanSellHotDogEvent(), 1);
+		}
+
+		[Test]
+		public void CustomerArrivesDuringSaleThenCompleteSale()
+		{
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
+
+			Act_Sell();
+
+			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
+
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
+
+			Act_ProgressTime(TimeSpan.FromMinutes(1));
+
+			Assert_EventsObserved(
+				new CanSellHotDogEvent(),
+				new SaleStartedEvent(),
+				new CantSellHotDogEvent(),
+				new HotDogSoldEvent(),
+				new CanSellHotDogEvent()
 			);
 		}
 	}

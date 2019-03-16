@@ -13,22 +13,22 @@ namespace Assets.Code.Presentation
 		public Text CustomerText;
 		
 		[Inject]
-		public void Initialize(HotDogCart cart)
+		public void Initialize(Customers customers)
 		{
 			ClearCustomerWaiting();
 
-			cart.Events
-				.OfType<HotDogCartEvent, CustomerStartedWaitingEvent>()
+			customers.Events
+				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ShowCustomerWaiting());
 
-			cart.Events
-				.OfType<HotDogCartEvent, SaleStartedEvent>()
+			customers.Events
+				.OfType<CustomersEvent, NoWaitingCustomerEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ClearCustomerWaiting());
 
-			cart.Events
-				.OfType<HotDogCartEvent, PotentialCustomerWalkedAwayEvent>()
+			customers.Events
+				.OfType<CustomersEvent, PotentialCustomerWalkedAwayEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ShowMissedCustomer());
 		}
