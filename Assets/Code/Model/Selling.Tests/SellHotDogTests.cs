@@ -27,7 +27,9 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_ProgressTime(duration);
 
 			Assert_EventsObserved(
+				new CanSellHotDogEvent(),
 				new SaleStartedEvent(),
+				new CantSellHotDogEvent(),
 				new TimeProgressedEvent(duration),
 				new HotDogSoldEvent()
 			);
