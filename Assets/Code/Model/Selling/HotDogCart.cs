@@ -19,7 +19,11 @@ namespace Assets.Code.Model.Selling
 
 			_customersEvents
 				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
-				.Subscribe(_ => _customerWaiting = true);
+				.Subscribe(_ =>
+				{
+					_customerWaiting = true;
+					_events.OnNext(new CanSellHotDogEvent());
+				});
 
 			_customersEvents
 				.OfType<CustomersEvent, NoWaitingCustomerEvent>()
@@ -37,6 +41,7 @@ namespace Assets.Code.Model.Selling
 
 			StartSale();
 			_events.OnNext(new SaleStartedEvent());
+			_events.OnNext(new CantSellHotDogEvent());
 		}
 		
 		public void ProgressTime(TimeSpan duration)
