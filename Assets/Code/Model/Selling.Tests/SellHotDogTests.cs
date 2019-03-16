@@ -31,7 +31,8 @@ namespace Assets.Code.Model.Selling.Tests
 				new SaleStartedEvent(),
 				new CantSellHotDogEvent(),
 				new TimeProgressedEvent(duration),
-				new HotDogSoldEvent()
+				new HotDogSoldEvent(),
+				new CanSellHotDogEvent()
 			);
 		}
 		

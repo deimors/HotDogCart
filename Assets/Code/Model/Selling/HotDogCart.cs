@@ -63,6 +63,9 @@ namespace Assets.Code.Model.Selling
 			CompleteSale();
 			
 			_events.OnNext(new HotDogSoldEvent());
+
+			if (_customerWaiting)
+				_events.OnNext(new CanSellHotDogEvent());
 		}
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
@@ -70,9 +73,7 @@ namespace Assets.Code.Model.Selling
 		private bool IsTimeRemainingInSale => _remainingSaleTime > TimeSpan.Zero;
 
 		private void StartSale()
-		{
-			_remainingSaleTime = _sellTime;
-		}
+			=> _remainingSaleTime = _sellTime;
 
 		private void CompleteSale()
 			=> _remainingSaleTime = null;
