@@ -184,5 +184,17 @@ namespace Assets.Code.Model.Selling.Tests
 				new HotDogSoldEvent()
 			);
 		}
+
+		[Test]
+		public void CustomerArrivesDuringSale()
+		{
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
+
+			Act_Sell();
+
+			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
+			
+			Assert_EventObserved(new CanSellHotDogEvent(), 1);
+		}
 	}
 }
