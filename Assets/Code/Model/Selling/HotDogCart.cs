@@ -19,6 +19,7 @@ namespace Assets.Code.Model.Selling
 
 			_customersEvents
 				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
+				.Where(_ => !_customerWaiting)
 				.Subscribe(_ =>
 				{
 					_customerWaiting = true;
