@@ -19,11 +19,12 @@ namespace Assets.Code.Model.Selling
 
 			_customersEvents
 				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
-				.Where(_ => !_customerWaiting)
 				.Subscribe(_ =>
 				{
 					_customerWaiting = true;
-					_events.OnNext(new CanSellHotDogEvent());
+
+					if (!IsSaleActive)
+						_events.OnNext(new CanSellHotDogEvent());
 				});
 
 			_customersEvents
@@ -34,7 +35,7 @@ namespace Assets.Code.Model.Selling
 		public IObservable<HotDogCartEvent> Events => _events;
 
 		public IObserver<CustomersEvent> CustomersObserver => _customersEvents;
-
+		
 		public void Sell()
 		{
 			if (IsSaleActive || !_customerWaiting)
