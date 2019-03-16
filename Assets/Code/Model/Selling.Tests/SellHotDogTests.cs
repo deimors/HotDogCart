@@ -192,6 +192,8 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Act_Sell();
 
+			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
+
 			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 			
 			Assert_EventObserved(new CanSellHotDogEvent(), 1);
