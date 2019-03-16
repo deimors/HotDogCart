@@ -13,10 +13,6 @@ namespace Assets.Code.Infrastructure
 			
 			Container.Bind<HotDogCart>().AsSingle().WithArguments(TimeSpan.FromMinutes(1)).NonLazy();
 
-			Container.Bind<IObservable<CustomersEvent>>()
-				.FromMethod(context => context.Container.Resolve<Customers>().Events)
-				.AsSingle();
-
 			Container.Bind<HotDogCartTimePump>().AsSingle().NonLazy();
 
 			Container.Bind<HotDogCartCustomerGenerator>().AsSingle().NonLazy();
