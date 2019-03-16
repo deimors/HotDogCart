@@ -9,7 +9,6 @@ namespace Assets.Code.Model.Selling
 		private readonly ISubject<CustomersEvent> _events = new Subject<CustomersEvent>();
 		private readonly ISubject<HotDogCartEvent> _cartEvents = new Subject<HotDogCartEvent>();
 
-		private TimeSpan? _remainingSaleTime;
 		private bool _customerWaiting;
 
 		public IObservable<CustomersEvent> Events => _events;
@@ -32,7 +31,7 @@ namespace Assets.Code.Model.Selling
 			}
 			else
 			{
-				_events.OnNext(new PotentialCustomerWalkedAwayEvent());
+				_events.OnNext(new MissedCustomerEvent());
 			}
 		}
 

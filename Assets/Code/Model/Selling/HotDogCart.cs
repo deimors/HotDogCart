@@ -24,7 +24,7 @@ namespace Assets.Code.Model.Selling
 					_customerWaiting = true;
 
 					if (!IsSaleActive)
-						_events.OnNext(new CanSellHotDogEvent());
+						_events.OnNext(new CanSellEvent());
 				});
 
 			_customersEvents
@@ -43,7 +43,7 @@ namespace Assets.Code.Model.Selling
 
 			StartSale();
 			_events.OnNext(new SaleStartedEvent());
-			_events.OnNext(new CantSellHotDogEvent());
+			_events.OnNext(new CantSellEvent());
 		}
 		
 		public void ProgressTime(TimeSpan duration)
@@ -62,10 +62,10 @@ namespace Assets.Code.Model.Selling
 
 			CompleteSale();
 			
-			_events.OnNext(new HotDogSoldEvent());
+			_events.OnNext(new SaleCompletedEvent());
 
 			if (_customerWaiting)
-				_events.OnNext(new CanSellHotDogEvent());
+				_events.OnNext(new CanSellEvent());
 		}
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;

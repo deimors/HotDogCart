@@ -21,11 +21,11 @@ namespace Assets.Code.Presentation
 		[Inject]
 		public void Initialize()
 		{
-			LogOnCartEvent<HotDogSoldEvent>("Hot Dog Sold");
+			LogOnCartEvent<SaleCompletedEvent>("Hot Dog Sold");
 
 			LogOnCustomersEvent<CustomerStartedWaitingEvent>("Customer Waiting");
 
-			LogOnCustomersEvent<PotentialCustomerWalkedAwayEvent>("Potential Customer Walked Away");
+			LogOnCustomersEvent<MissedCustomerEvent>("Potential Customer Walked Away");
 		}
 
 		private void LogOnCartEvent<TEvent>(string message) where TEvent : HotDogCartEvent

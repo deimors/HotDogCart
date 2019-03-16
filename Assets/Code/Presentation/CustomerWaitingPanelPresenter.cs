@@ -28,7 +28,7 @@ namespace Assets.Code.Presentation
 				.Subscribe(_ => ClearCustomerWaiting());
 
 			customers.Events
-				.OfType<CustomersEvent, PotentialCustomerWalkedAwayEvent>()
+				.OfType<CustomersEvent, MissedCustomerEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ShowMissedCustomer());
 		}

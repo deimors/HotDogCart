@@ -24,13 +24,13 @@ namespace Assets.Code.Presentation
 			HideProgressSlider();
 			DisableSellButton();
 
-			OnCartEvent<CanSellHotDogEvent>(_ => EnableSellButton());
+			OnCartEvent<CanSellEvent>(_ => EnableSellButton());
 
-			OnCartEvent<CantSellHotDogEvent>(_ => DisableSellButton());
+			OnCartEvent<CantSellEvent>(_ => DisableSellButton());
 
 			OnCartEvent<SaleStartedEvent>(_ => ShowProgressSlider());
 
-			OnCartEvent<HotDogSoldEvent>(_ => HideProgressSlider());
+			OnCartEvent<SaleCompletedEvent>(_ => HideProgressSlider());
 
 			OnCartEvent<SaleProgressedEvent>(e => ProgressSlider.value = e.Progress);
 		}

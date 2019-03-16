@@ -43,7 +43,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new CustomerStartedWaitingEvent(),
-				new PotentialCustomerWalkedAwayEvent()
+				new MissedCustomerEvent()
 			);
 		}
 
