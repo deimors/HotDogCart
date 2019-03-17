@@ -62,7 +62,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new CustomerStartedWaitingEvent(),
-				new NoWaitingCustomerEvent()
+				new NoWaitingCustomersEvent()
 			);
 		}
 
@@ -80,7 +80,7 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventsObserved(
 				new CustomerStartedWaitingEvent(),
 				new CustomerStartedWaitingEvent(),
-				new NoWaitingCustomerEvent()
+				new NoWaitingCustomersEvent()
 			);
 		}
 

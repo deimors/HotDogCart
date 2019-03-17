@@ -42,7 +42,7 @@ namespace Assets.Code.Model.Selling
 			_customersWaiting--;
 
 			if (_customersWaiting == 0)
-				_events.OnNext(new NoWaitingCustomerEvent());
+				_events.OnNext(new NoWaitingCustomersEvent());
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Assets.Code.Model.Selling
 				});
 
 			_customersEvents
-				.OfType<CustomersEvent, NoWaitingCustomerEvent>()
+				.OfType<CustomersEvent, NoWaitingCustomersEvent>()
 				.Subscribe(_ => _customerWaiting = false);
 		}
 

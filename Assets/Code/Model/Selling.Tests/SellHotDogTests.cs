@@ -128,7 +128,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Act_Sell();
 
-			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
+			Arrange_CustomersEvent(new NoWaitingCustomersEvent());
 
 			Act_ProgressTime(TimeSpan.FromMinutes(1));
 
@@ -193,7 +193,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Act_Sell();
 
-			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
+			Arrange_CustomersEvent(new NoWaitingCustomersEvent());
 
 			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 			
@@ -207,7 +207,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Act_Sell();
 
-			Arrange_CustomersEvent(new NoWaitingCustomerEvent());
+			Arrange_CustomersEvent(new NoWaitingCustomersEvent());
 
 			Arrange_CustomersEvent(new CustomerStartedWaitingEvent());
 
