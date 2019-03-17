@@ -11,7 +11,7 @@ namespace Assets.Code.Model.Selling.Tests
 		{
 			Act_AddWaitingCustomer();
 
-			Assert_EventObserved(new CustomersWaitingEvent());
+			Assert_EventObserved(new LineNotEmptyEvent());
 		}
 
 		[Test]
@@ -24,8 +24,8 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_AddWaitingCustomer();
 
 			Assert_EventsObserved(
-				new CustomersWaitingEvent(),
-				new CustomersWaitingEvent(),
+				new LineNotEmptyEvent(),
+				new LineNotEmptyEvent(),
 				new MissedCustomerEvent()
 			);
 		}
@@ -38,8 +38,8 @@ namespace Assets.Code.Model.Selling.Tests
 			Arrange_SaleStarted();
 
 			Assert_EventsObserved(
-				new CustomersWaitingEvent(),
-				new NoWaitingCustomersEvent()
+				new LineNotEmptyEvent(),
+				new LineEmptyEvent()
 			);
 		}
 
@@ -55,9 +55,9 @@ namespace Assets.Code.Model.Selling.Tests
 			Arrange_SaleStarted();
 
 			Assert_EventsObserved(
-				new CustomersWaitingEvent(),
-				new CustomersWaitingEvent(),
-				new NoWaitingCustomersEvent()
+				new LineNotEmptyEvent(),
+				new LineNotEmptyEvent(),
+				new LineEmptyEvent()
 			);
 		}
 
@@ -71,8 +71,8 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_AddWaitingCustomer();
 
 			Assert_EventsObserved(
-				new CustomersWaitingEvent(),
-				new CustomersWaitingEvent()
+				new LineNotEmptyEvent(),
+				new LineNotEmptyEvent()
 			);
 		}
 	}

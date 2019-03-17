@@ -18,7 +18,7 @@ namespace Assets.Code.Model.Selling
 			_sellTime = sellTime;
 
 			_customersEvents
-				.OfType<CustomersEvent, CustomersWaitingEvent>()
+				.OfType<CustomersEvent, LineNotEmptyEvent>()
 				.Subscribe(_ =>
 				{
 					_customerWaiting = true;
@@ -28,7 +28,7 @@ namespace Assets.Code.Model.Selling
 				});
 
 			_customersEvents
-				.OfType<CustomersEvent, NoWaitingCustomersEvent>()
+				.OfType<CustomersEvent, LineEmptyEvent>()
 				.Subscribe(_ => _customerWaiting = false);
 		}
 

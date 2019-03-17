@@ -29,7 +29,7 @@ namespace Assets.Code.Model.Selling
 			if (_lineLength < _maxLineLength)
 			{
 				_lineLength++;
-				_events.OnNext(new CustomersWaitingEvent());
+				_events.OnNext(new LineNotEmptyEvent());
 			}
 			else
 			{
@@ -42,7 +42,7 @@ namespace Assets.Code.Model.Selling
 			_lineLength--;
 
 			if (_lineLength == 0)
-				_events.OnNext(new NoWaitingCustomersEvent());
+				_events.OnNext(new LineEmptyEvent());
 		}
 	}
 }

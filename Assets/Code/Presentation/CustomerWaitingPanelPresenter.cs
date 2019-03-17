@@ -18,12 +18,12 @@ namespace Assets.Code.Presentation
 			ClearCustomerWaiting();
 
 			customers.Events
-				.OfType<CustomersEvent, CustomersWaitingEvent>()
+				.OfType<CustomersEvent, LineNotEmptyEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ShowCustomerWaiting());
 
 			customers.Events
-				.OfType<CustomersEvent, NoWaitingCustomersEvent>()
+				.OfType<CustomersEvent, LineEmptyEvent>()
 				.TakeUntilDestroy(gameObject)
 				.Subscribe(_ => ClearCustomerWaiting());
 
