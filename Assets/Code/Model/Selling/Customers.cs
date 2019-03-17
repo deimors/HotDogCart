@@ -40,7 +40,9 @@ namespace Assets.Code.Model.Selling
 		private void RemoveWaitingCustomer()
 		{
 			_customersWaiting--;
-			_events.OnNext(new NoWaitingCustomerEvent());
+
+			if (_customersWaiting == 0)
+				_events.OnNext(new NoWaitingCustomerEvent());
 		}
 	}
 }
