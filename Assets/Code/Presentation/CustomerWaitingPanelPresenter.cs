@@ -18,9 +18,14 @@ namespace Assets.Code.Presentation
 			ClearCustomerWaiting();
 
 			customers.Events
-				.OfType<CustomersEvent, LineNotEmptyEvent>()
+				.OfType<CustomersEvent, LineLengthIncreasedEvent>()
 				.TakeUntilDestroy(gameObject)
-				.Subscribe(_ => ShowCustomerWaiting());
+				.Subscribe(e => ShowCustomerWaiting(e.LineLength));
+
+			customers.Events
+				.OfType<CustomersEvent, LineLengthDecreasedEvent>()
+				.TakeUntilDestroy(gameObject)
+				.Subscribe(e => ShowCustomerWaiting(e.LineLength));
 
 			customers.Events
 				.OfType<CustomersEvent, LineEmptyEvent>()
@@ -34,10 +39,10 @@ namespace Assets.Code.Presentation
 		}
 
 
-		private void ShowCustomerWaiting()
+		private void ShowCustomerWaiting(int lineLength)
 		{
 			BackgroundImage.color = Color.green;
-			CustomerText.text = "Waiting";
+			CustomerText.text = $"{lineLength} Waiting";
 		}
 
 		private void ClearCustomerWaiting()
