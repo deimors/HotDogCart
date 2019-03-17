@@ -21,26 +21,30 @@ namespace Assets.Code.Presentation
 		[Inject]
 		public void Initialize()
 		{
-			LogOnCartEvent<SaleCompletedEvent>("Hot Dog Sold");
+			LogOnCartEvent<SaleCompletedEvent>(_ => "Hot Dog Sold");
 
-			LogOnCustomersEvent<CustomerStartedWaitingEvent>("Customer Waiting");
+			LogOnCustomersEvent<LineNotEmptyEvent>(_ => "Line Not Empty");
+			LogOnCustomersEvent<LineEmptyEvent>(_ => "Line Empty");
 
-			LogOnCustomersEvent<MissedCustomerEvent>("Potential Customer Walked Away");
+			LogOnCustomersEvent<LineLengthIncreasedEvent>(e => $"Line Increased to {e.LineLength}");
+			LogOnCustomersEvent<LineLengthDecreasedEvent>(e => $"Line Decreased to {e.LineLength}");
+
+			LogOnCustomersEvent<MissedCustomerEvent>(_ => "Missed Customer");
 		}
 
-		private void LogOnCartEvent<TEvent>(string message) where TEvent : HotDogCartEvent
+		private void LogOnCartEvent<TEvent>(Func<TEvent, string> message) where TEvent : HotDogCartEvent
 			=> LogOnEvent<HotDogCartEvent, TEvent>(Cart.Events, message);
 
-		private void LogOnCustomersEvent<TEvent>(string message) where TEvent : CustomersEvent
+		private void LogOnCustomersEvent<TEvent>(Func<TEvent, string> message) where TEvent : CustomersEvent
 			=> LogOnEvent<CustomersEvent, TEvent>(Customers.Events, message);
 
-		private void LogOnEvent<TBaseEvent, TEvent>(IObservable<TBaseEvent> events, string message) where TEvent : TBaseEvent
+		private void LogOnEvent<TBaseEvent, TEvent>(IObservable<TBaseEvent> events, Func<TEvent, string> message) where TEvent : TBaseEvent
 			=> events
 				.OfType<TBaseEvent, TEvent>()
-				.Select(_ => Math.Abs(Scroll.verticalNormalizedPosition) < Mathf.Epsilon)
-				.Do(_ => LogText.text += LogText.text == string.Empty ? message : "\n" + message)
+				.Select(e => new { e, atScrollEnd = Math.Abs(Scroll.verticalNormalizedPosition) < Mathf.Epsilon}) 
+				.Do(a => LogText.text += LogText.text == string.Empty ? message(a.e) : "\n" + message(a.e))
 				.DelayFrame(1)
-				.Where(atScrollEnd => atScrollEnd)
+				.Where(a => a.atScrollEnd)
 				.Subscribe(_ => Scroll.verticalNormalizedPosition = 0);
 	}
 }

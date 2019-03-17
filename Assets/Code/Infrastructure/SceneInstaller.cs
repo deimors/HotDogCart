@@ -9,7 +9,7 @@ namespace Assets.Code.Infrastructure
 	{
 		public override void InstallBindings()
 		{
-			Container.Bind<Customers>().AsSingle().NonLazy();
+			Container.Bind<Customers>().AsSingle().WithArguments(2).NonLazy();
 			
 			Container.Bind<HotDogCart>().AsSingle().WithArguments(TimeSpan.FromMinutes(1)).NonLazy();
 
