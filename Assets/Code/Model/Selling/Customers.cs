@@ -29,7 +29,10 @@ namespace Assets.Code.Model.Selling
 			if (_lineLength < _maxLineLength)
 			{
 				_lineLength++;
-				_events.OnNext(new LineNotEmptyEvent());
+				_events.OnNext(new LineLengthIncreasedEvent(_lineLength));
+
+				if (_lineLength == 1)
+					_events.OnNext(new LineNotEmptyEvent());
 			}
 			else
 			{
