@@ -3,14 +3,15 @@ using NUnit.Framework;
 
 namespace Assets.Code.Model.Selling.Tests
 {
-	public class CustomersTestFixture : ObserverTestFixture<CustomersEvent>
+	public abstract class CustomersTestFixture : ObserverTestFixture<CustomersEvent>
 	{
 		private Customers _customers;
+		protected abstract int LineLength { get; }
 
 		[SetUp]
 		public override void Setup()
 		{
-			_customers = new Customers();
+			_customers = new Customers(LineLength);
 
 			base.Setup();
 		}
@@ -26,6 +27,8 @@ namespace Assets.Code.Model.Selling.Tests
 
 	public class CustomerWaitingTests : CustomersTestFixture
 	{
+		protected override int LineLength => 2;
+
 		[Test]
 		public void AddWaitingCustomer()
 		{
@@ -35,13 +38,16 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void AddWaitingCustomerTwice()
+		public void LineFull()
 		{
 			Act_AddWaitingCustomer();
 
 			Act_AddWaitingCustomer();
 
+			Act_AddWaitingCustomer();
+
 			Assert_EventsObserved(
+				new CustomerStartedWaitingEvent(),
 				new CustomerStartedWaitingEvent(),
 				new MissedCustomerEvent()
 			);
@@ -61,7 +67,7 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void AddWaitingCustomerThenSaleStartedThenAddAnotherWaitingCustomer()
+		public void SaleStartedBetweenTwoAddWaitingCustomers()
 		{
 			Act_AddWaitingCustomer();
 

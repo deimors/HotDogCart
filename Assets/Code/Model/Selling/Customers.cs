@@ -15,7 +15,7 @@ namespace Assets.Code.Model.Selling
 
 		public IObserver<HotDogCartEvent> CartObserver => _cartEvents;
 
-		public Customers()
+		public Customers(int lineLength)
 		{
 			_cartEvents
 				.OfType<HotDogCartEvent, SaleStartedEvent>()
