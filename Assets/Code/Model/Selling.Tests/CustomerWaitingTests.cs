@@ -54,13 +54,31 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void AddWaitingCustomerThenSaleStarted()
+		public void OneWaitingCustomerServed()
 		{
 			Act_AddWaitingCustomer();
 
 			Arrange_SaleStarted();
 
 			Assert_EventsObserved(
+				new CustomerStartedWaitingEvent(),
+				new NoWaitingCustomerEvent()
+			);
+		}
+
+		[Test]
+		public void TwoWaitingCustomersServed()
+		{
+			Act_AddWaitingCustomer();
+
+			Act_AddWaitingCustomer();
+
+			Arrange_SaleStarted();
+
+			Arrange_SaleStarted();
+
+			Assert_EventsObserved(
+				new CustomerStartedWaitingEvent(),
 				new CustomerStartedWaitingEvent(),
 				new NoWaitingCustomerEvent()
 			);
