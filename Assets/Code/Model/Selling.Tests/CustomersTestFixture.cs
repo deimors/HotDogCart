@@ -6,12 +6,12 @@ namespace Assets.Code.Model.Selling.Tests
 	public abstract class CustomersTestFixture : ObserverTestFixture<CustomersEvent>
 	{
 		private Customers _customers;
-		protected abstract int LineLength { get; }
+		protected abstract int MaxLineLength { get; }
 
 		[SetUp]
 		public override void Setup()
 		{
-			_customers = new Customers(LineLength);
+			_customers = new Customers(MaxLineLength);
 
 			base.Setup();
 		}

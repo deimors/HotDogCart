@@ -23,7 +23,7 @@ namespace Assets.Code.Presentation
 		{
 			LogOnCartEvent<SaleCompletedEvent>("Hot Dog Sold");
 
-			LogOnCustomersEvent<CustomerStartedWaitingEvent>("Customer Waiting");
+			LogOnCustomersEvent<CustomersWaitingEvent>("Customer Waiting");
 
 			LogOnCustomersEvent<MissedCustomerEvent>("Potential Customer Walked Away");
 		}

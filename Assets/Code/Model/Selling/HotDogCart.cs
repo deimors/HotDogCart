@@ -18,7 +18,7 @@ namespace Assets.Code.Model.Selling
 			_sellTime = sellTime;
 
 			_customersEvents
-				.OfType<CustomersEvent, CustomerStartedWaitingEvent>()
+				.OfType<CustomersEvent, CustomersWaitingEvent>()
 				.Subscribe(_ =>
 				{
 					_customerWaiting = true;

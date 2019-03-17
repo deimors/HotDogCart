@@ -5,19 +5,19 @@ namespace Assets.Code.Model.Selling
 {
 	public class Customers
 	{
-		private readonly int _lineLength;
+		private readonly int _maxLineLength;
 		private readonly ISubject<CustomersEvent> _events = new Subject<CustomersEvent>();
 		private readonly ISubject<HotDogCartEvent> _cartEvents = new Subject<HotDogCartEvent>();
 
-		private int _customersWaiting;
+		private int _lineLength;
 
 		public IObservable<CustomersEvent> Events => _events;
 
 		public IObserver<HotDogCartEvent> CartObserver => _cartEvents;
 
-		public Customers(int lineLength)
+		public Customers(int maxLineLength)
 		{
-			_lineLength = lineLength;
+			_maxLineLength = maxLineLength;
 
 			_cartEvents
 				.OfType<HotDogCartEvent, SaleStartedEvent>()
@@ -26,10 +26,10 @@ namespace Assets.Code.Model.Selling
 		
 		public void AddWaitingCustomer()
 		{
-			if (_customersWaiting < _lineLength)
+			if (_lineLength < _maxLineLength)
 			{
-				_customersWaiting++;
-				_events.OnNext(new CustomerStartedWaitingEvent());
+				_lineLength++;
+				_events.OnNext(new CustomersWaitingEvent());
 			}
 			else
 			{
@@ -39,9 +39,9 @@ namespace Assets.Code.Model.Selling
 
 		private void RemoveWaitingCustomer()
 		{
-			_customersWaiting--;
+			_lineLength--;
 
-			if (_customersWaiting == 0)
+			if (_lineLength == 0)
 				_events.OnNext(new NoWaitingCustomersEvent());
 		}
 	}

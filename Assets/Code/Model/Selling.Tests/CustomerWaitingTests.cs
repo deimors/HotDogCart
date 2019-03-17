@@ -4,14 +4,14 @@ namespace Assets.Code.Model.Selling.Tests
 {
 	public class CustomerWaitingTests : CustomersTestFixture
 	{
-		protected override int LineLength => 2;
+		protected override int MaxLineLength => 2;
 
 		[Test]
 		public void AddWaitingCustomer()
 		{
 			Act_AddWaitingCustomer();
 
-			Assert_EventObserved(new CustomerStartedWaitingEvent());
+			Assert_EventObserved(new CustomersWaitingEvent());
 		}
 
 		[Test]
@@ -24,8 +24,8 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_AddWaitingCustomer();
 
 			Assert_EventsObserved(
-				new CustomerStartedWaitingEvent(),
-				new CustomerStartedWaitingEvent(),
+				new CustomersWaitingEvent(),
+				new CustomersWaitingEvent(),
 				new MissedCustomerEvent()
 			);
 		}
@@ -38,7 +38,7 @@ namespace Assets.Code.Model.Selling.Tests
 			Arrange_SaleStarted();
 
 			Assert_EventsObserved(
-				new CustomerStartedWaitingEvent(),
+				new CustomersWaitingEvent(),
 				new NoWaitingCustomersEvent()
 			);
 		}
@@ -55,8 +55,8 @@ namespace Assets.Code.Model.Selling.Tests
 			Arrange_SaleStarted();
 
 			Assert_EventsObserved(
-				new CustomerStartedWaitingEvent(),
-				new CustomerStartedWaitingEvent(),
+				new CustomersWaitingEvent(),
+				new CustomersWaitingEvent(),
 				new NoWaitingCustomersEvent()
 			);
 		}
@@ -71,8 +71,8 @@ namespace Assets.Code.Model.Selling.Tests
 			Act_AddWaitingCustomer();
 
 			Assert_EventsObserved(
-				new CustomerStartedWaitingEvent(),
-				new CustomerStartedWaitingEvent()
+				new CustomersWaitingEvent(),
+				new CustomersWaitingEvent()
 			);
 		}
 	}
