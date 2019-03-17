@@ -41,6 +41,7 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventsObserved(
 				new LineLengthIncreasedEvent(1),
 				new LineNotEmptyEvent(),
+				new LineLengthDecreasedEvent(lineLength: 0),
 				new LineEmptyEvent()
 			);
 		}
@@ -60,6 +61,8 @@ namespace Assets.Code.Model.Selling.Tests
 				new LineLengthIncreasedEvent(1),
 				new LineNotEmptyEvent(),
 				new LineLengthIncreasedEvent(2),
+				new LineLengthDecreasedEvent(lineLength: 1),
+				new LineLengthDecreasedEvent(lineLength: 0),
 				new LineEmptyEvent()
 			);
 		}
@@ -76,6 +79,7 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventsObserved(
 				new LineLengthIncreasedEvent(1),
 				new LineNotEmptyEvent(),
+				new LineLengthDecreasedEvent(lineLength: 0),
 				new LineEmptyEvent(),
 				new LineLengthIncreasedEvent(1),
 				new LineNotEmptyEvent()
