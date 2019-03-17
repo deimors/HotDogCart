@@ -43,6 +43,7 @@ namespace Assets.Code.Model.Selling
 		private void RemoveWaitingCustomer()
 		{
 			_lineLength--;
+			_events.OnNext(new LineLengthDecreasedEvent(_lineLength));
 
 			if (_lineLength == 0)
 				_events.OnNext(new LineEmptyEvent());
