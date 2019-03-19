@@ -11,32 +11,29 @@ namespace Assets.Code.Presentation
 	{
 		public Image BackgroundImage;
 		public Text CustomerText;
+
+		[Inject]
+		public Customers Customers { private get; set; }
 		
 		[Inject]
-		public void Initialize(Customers customers)
+		public void Initialize()
 		{
 			ClearCustomerWaiting();
 
-			customers.Events
-				.OfType<CustomersEvent, LineLengthIncreasedEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(e => ShowCustomerWaiting(e.LineLength));
+			OnCustomersEvent<LineLengthIncreasedEvent>(e => ShowCustomerWaiting(e.LineLength));
 
-			customers.Events
-				.OfType<CustomersEvent, LineLengthDecreasedEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(e => ShowCustomerWaiting(e.LineLength));
+			OnCustomersEvent<LineLengthDecreasedEvent>(e => ShowCustomerWaiting(e.LineLength));
 
-			customers.Events
-				.OfType<CustomersEvent, LineEmptyEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(_ => ClearCustomerWaiting());
+			OnCustomersEvent<LineEmptyEvent>(_ => ClearCustomerWaiting());
 
-			customers.Events
-				.OfType<CustomersEvent, MissedCustomerEvent>()
-				.TakeUntilDestroy(gameObject)
-				.Subscribe(_ => ShowMissedCustomer());
+			OnCustomersEvent<MissedCustomerEvent>(_ => ShowMissedCustomer());
 		}
+
+		private void OnCustomersEvent<TEvent>(Action<TEvent> action)
+			=> Customers.Events
+				.OfType<CustomersEvent, TEvent>()
+				.TakeUntilDestroy(gameObject)
+				.Subscribe(action);
 
 
 		private void ShowCustomerWaiting(int lineLength)
