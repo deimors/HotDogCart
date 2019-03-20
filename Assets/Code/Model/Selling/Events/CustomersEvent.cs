@@ -1,4 +1,4 @@
-﻿namespace Assets.Code.Model.Selling
+﻿namespace Assets.Code.Model.Selling.Events
 {
 	public class CustomersEvent
 	{

@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Code.Model.Selling;
+using Assets.Code.Model.Selling.Events;
 using UnityEngine;
 using Zenject;
 using UniRx;

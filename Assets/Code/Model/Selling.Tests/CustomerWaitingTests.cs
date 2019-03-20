@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Assets.Code.Model.Selling.Events;
+using NUnit.Framework;
 
 namespace Assets.Code.Model.Selling.Tests
 {
