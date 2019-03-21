@@ -6,6 +6,21 @@ namespace Assets.Code.Model.Selling.Tests
 {
 	public class CookHotDogTests : GrillTestFixture
 	{
+		protected override TimeSpan CookTime => TimeSpan.FromMinutes(5);
+
+		[Test]
+		public void AddHotDog()
+		{
+			Act_AddHotDog();
+
+			Assert_EventsObserved(
+				new HotDogAddedEvent(0)
+			);
+
+			Assert_EventNotObserved(new CookingProgressedEvent(1.0f));
+			Assert_EventNotObserved(new HotDogCookedEvent(0));
+		}
+
 		[Test]
 		public void AddHotDogAndCookIt()
 		{
@@ -21,13 +36,13 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 	}
 
-	public class GrillTestFixture : ObserverTestFixture<GrillEvent>
+	public abstract class GrillTestFixture : ObserverTestFixture<GrillEvent>
 	{
 		private Grill _grill;
 
 		private IObserver<GrillEvent> _observer;
 
-		protected virtual TimeSpan CookTime { get; } = TimeSpan.FromMinutes(5);
+		protected abstract TimeSpan CookTime { get; }
 
 		[SetUp]
 		public override void Setup()
