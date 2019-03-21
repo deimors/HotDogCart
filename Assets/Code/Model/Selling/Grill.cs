@@ -28,9 +28,9 @@ namespace Assets.Code.Model.Selling
 		{
 			foreach (var index in Enumerable.Range(0, _nextIndex))
 			{
-				if (!_remainingCookTimes[index].HasValue) continue;
+				if (!_remainingCookTimes[index].HasValue || _remainingCookTimes[index] == TimeSpan.Zero) continue;
 
-				_remainingCookTimes[index] -= duration;
+				_remainingCookTimes[index] -= duration > _remainingCookTimes[index] ? _remainingCookTimes[index] : duration;
 
 				var progress = 1 - ((double)(_remainingCookTimes[index]?.Ticks ?? 0) / CookTime.Ticks);
 
