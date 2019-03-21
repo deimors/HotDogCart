@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Assets.Code.Model.Selling.Events;
 using UniRx;
 
@@ -30,7 +31,10 @@ namespace Assets.Code.Model.Selling
 			_events.OnNext(new CookingProgressedEvent((float) progress));
 
 			if (progress >= 1)
-				_events.OnNext(new HotDogCookedEvent(0));
+			{
+				foreach (var index in Enumerable.Range(0, _nextIndex))
+					_events.OnNext(new HotDogCookedEvent(index));
+			}
 		}	
 	}
 }
