@@ -28,17 +28,32 @@ namespace Assets.Code.Model.Selling
 		{
 			foreach (var index in Enumerable.Range(0, _nextIndex))
 			{
-				if (!_remainingCookTimes[index].HasValue || _remainingCookTimes[index] == TimeSpan.Zero) continue;
+				if (!HasStartedCooking(index) || HasCompletedCooking(index)) continue;
 
-				_remainingCookTimes[index] -= duration > _remainingCookTimes[index] ? _remainingCookTimes[index] : duration;
+				DecreaseRemainingCookTime(index, duration);
 
-				var progress = 1 - ((double)(_remainingCookTimes[index]?.Ticks ?? 0) / CookTime.Ticks);
+				var progress = GetProgress(index);
 
 				_events.OnNext(new CookingProgressedEvent(index, (float)progress));
 
 				if (progress >= 1)
 					_events.OnNext(new HotDogCookedEvent(index));
 			}
-		}	
+		}
+
+		private double GetProgress(int index)
+			=> 1 - ((double)(_remainingCookTimes[index]?.Ticks ?? 0) / CookTime.Ticks);
+
+		private void DecreaseRemainingCookTime(int index, TimeSpan duration)
+			=> _remainingCookTimes[index] -= 
+				duration > _remainingCookTimes[index] 
+					? _remainingCookTimes[index] 
+					: duration;
+
+		private bool HasCompletedCooking(int index)
+			=> _remainingCookTimes[index] == TimeSpan.Zero;
+
+		private bool HasStartedCooking(int index)
+			=> _remainingCookTimes[index].HasValue;
 	}
 }
