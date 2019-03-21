@@ -28,11 +28,11 @@ namespace Assets.Code.Model.Selling
 
 			var progress = 1 - ((double)(_remainingCookTime?.Ticks ?? 0) / CookTime.Ticks);
 
-			_events.OnNext(new CookingProgressedEvent(0, (float) progress));
-
-			if (progress >= 1)
+			foreach (var index in Enumerable.Range(0, _nextIndex))
 			{
-				foreach (var index in Enumerable.Range(0, _nextIndex))
+				_events.OnNext(new CookingProgressedEvent(index, (float)progress));
+
+				if (progress >= 1)
 					_events.OnNext(new HotDogCookedEvent(index));
 			}
 		}	
