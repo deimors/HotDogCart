@@ -38,6 +38,22 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
+		public void AddHotDogAndHalfCookTwice()
+		{
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+			Act_ProgressTime(HalfCookTime);
+
+			Assert_EventsObserved(
+				new HotDogAddedEvent(0),
+				new CookingProgressedEvent(.5f),
+				new CookingProgressedEvent(1),
+				new HotDogCookedEvent(0)
+			);
+		}
+
+		[Test]
 		public void AddHotDogAndCookCompletely()
 		{
 			Act_AddHotDog();
