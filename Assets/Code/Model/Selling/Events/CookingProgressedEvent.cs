@@ -6,7 +6,7 @@ namespace Assets.Code.Model.Selling.Events
 	{
 		public float Progress { get; }
 
-		public CookingProgressedEvent(float progress)
+		public CookingProgressedEvent(int index, float progress)
 		{
 			Progress = progress;
 		}

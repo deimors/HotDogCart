@@ -18,7 +18,7 @@ namespace Assets.Code.Model.Selling.Tests
 				new HotDogAddedEvent(0)
 			);
 
-			Assert_EventNotObserved(new CookingProgressedEvent(1.0f));
+			Assert_EventNotObserved(new CookingProgressedEvent(0, 1.0f));
 			Assert_EventNotObserved(new HotDogCookedEvent(0));
 		}
 
@@ -31,7 +31,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogAddedEvent(0),
-				new CookingProgressedEvent(.5f)
+				new CookingProgressedEvent(0, .5f)
 			);
 
 			Assert_EventNotObserved(new HotDogCookedEvent(0));
@@ -47,8 +47,8 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogAddedEvent(0),
-				new CookingProgressedEvent(.5f),
-				new CookingProgressedEvent(1),
+				new CookingProgressedEvent(0, .5f),
+				new CookingProgressedEvent(0, 1),
 				new HotDogCookedEvent(0)
 			);
 		}
@@ -62,7 +62,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogAddedEvent(0),
-				new CookingProgressedEvent(1.0f),
+				new CookingProgressedEvent(0, 1.0f),
 				new HotDogCookedEvent(0)
 			);
 		}
@@ -90,9 +90,31 @@ namespace Assets.Code.Model.Selling.Tests
 			Assert_EventsObserved(
 				new HotDogAddedEvent(0),
 				new HotDogAddedEvent(1),
-				new CookingProgressedEvent(1),
+				new CookingProgressedEvent(0, 1),
 				new HotDogCookedEvent(0),
+				new CookingProgressedEvent(1, 1),
 				new HotDogCookedEvent(1)
+			);
+		}
+
+		[Test]
+		public void AddTwoHotDogsStaggeredAndCookFirstCompletely()
+		{
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+
+			Assert_EventsObserved(
+				new HotDogAddedEvent(0),
+				new CookingProgressedEvent(index: 0, 0.5f),
+				new HotDogAddedEvent(1),
+				new CookingProgressedEvent(0, 1),
+				new HotDogCookedEvent(0),
+				new CookingProgressedEvent(1, .5f)
 			);
 		}
 	}
