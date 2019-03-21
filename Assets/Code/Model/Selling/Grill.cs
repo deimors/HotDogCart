@@ -12,11 +12,13 @@ namespace Assets.Code.Model.Selling
 		private TimeSpan? _remainingCookTime;
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
 
+		private int _nextIndex;
+
 		public void AddHotDog()
 		{
 			_remainingCookTime = CookTime;
 
-			_events.OnNext(new HotDogAddedEvent(0));
+			_events.OnNext(new HotDogAddedEvent(_nextIndex++));
 		}
 
 		public void ProgressTime(TimeSpan duration)
