@@ -78,6 +78,23 @@ namespace Assets.Code.Model.Selling.Tests
 				new HotDogAddedEvent(1)
 			);
 		}
+
+		[Test]
+		public void AddTwoHotDogsAndCookBothCompletely()
+		{
+			Act_AddHotDog();
+			Act_AddHotDog();
+
+			Act_ProgressTime(CookTime);
+
+			Assert_EventsObserved(
+				new HotDogAddedEvent(0),
+				new HotDogAddedEvent(1),
+				new CookingProgressedEvent(1),
+				new HotDogCookedEvent(0),
+				new HotDogCookedEvent(1)
+			);
+		}
 	}
 
 	public abstract class GrillTestFixture : ObserverTestFixture<GrillEvent>
