@@ -43,7 +43,16 @@ namespace Assets.Code.Model.Selling
 
 		public void RemoveCookedHotDog()
 		{
-			_events.OnNext(new CookedHotDogRemovedEvent(0));
+			var removeIndex = _remainingCookTimes
+				.Select((time, index) => new {time, index})
+				.FirstOrDefault(anon => anon.time.HasValue)
+				?.index;
+
+			if (removeIndex.HasValue)
+			{
+				_remainingCookTimes[removeIndex.Value] = null;
+				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
+			}
 		}
 
 		private double GetProgress(int index)
