@@ -7,6 +7,7 @@ namespace Assets.Code.Model.Selling.Tests
 {
 	public class RemoveCookedHotDogTests : GrillTestFixture
 	{
+		private static readonly TimeSpan HalfCookTime = TimeSpan.FromMinutes(2.5);
 		protected override TimeSpan CookTime => TimeSpan.FromMinutes(5);
 
 		[Test]
@@ -82,6 +83,23 @@ namespace Assets.Code.Model.Selling.Tests
 				new HotDogCookedEvent(0),
 				new CookedHotDogRemovedEvent(0)
 			);
+		}
+
+		[Test]
+		public void HalfCookAndRemoveHotDog()
+		{
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+
+			Act_RemoveCookedHotDog();
+
+			Assert_EventsObserved(
+				new HotDogAddedEvent(0),
+				new CookingProgressedEvent(0, .5f)
+			);
+
+			Assert_EventNotObserved(Arg.Any<CookedHotDogRemovedEvent>());
 		}
 	}
 }
