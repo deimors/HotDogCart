@@ -16,16 +16,13 @@ namespace Assets.Code.Model.Selling
 
 		public void AddHotDog()
 		{
-			var addIndex = _remainingCookTimes
-				.Select((time, index) => new { time, index })
-				.FirstOrDefault(anon => !anon.time.HasValue)
-				?.index;
+			var addIndex = IndexOfFirstEmptyRemainingTime;
 
 			_remainingCookTimes[addIndex.Value] = CookTime;
 
 			_events.OnNext(new HotDogAddedEvent(addIndex.Value));
 		}
-
+		
 		public void ProgressTime(TimeSpan duration)
 		{
 			foreach (var index in Enumerable.Range(0, _remainingCookTimes.Length))
@@ -58,6 +55,12 @@ namespace Assets.Code.Model.Selling
 			=> _remainingCookTimes
 				.Select((time, index) => new {time, index})
 				.FirstOrDefault(anon => anon.time.HasValue)
+				?.index;
+
+		private int? IndexOfFirstEmptyRemainingTime 
+			=> _remainingCookTimes
+				.Select((time, index) => new { time, index })
+				.FirstOrDefault(anon => !anon.time.HasValue)
 				?.index;
 
 		private double GetProgress(int index)
