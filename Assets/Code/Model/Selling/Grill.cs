@@ -44,7 +44,7 @@ namespace Assets.Code.Model.Selling
 		{
 			var removeIndex = IndexOfFirstRemainingTime;
 
-			if (removeIndex.HasValue)
+			if (removeIndex.HasValue && HasCompletedCooking(removeIndex.Value))
 			{
 				_remainingCookTimes[removeIndex.Value] = null;
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
