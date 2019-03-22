@@ -43,10 +43,7 @@ namespace Assets.Code.Model.Selling
 
 		public void RemoveCookedHotDog()
 		{
-			var removeIndex = _remainingCookTimes
-				.Select((time, index) => new {time, index})
-				.FirstOrDefault(anon => anon.time.HasValue)
-				?.index;
+			var removeIndex = IndexOfFirstRemainingTime;
 
 			if (removeIndex.HasValue)
 			{
@@ -54,6 +51,12 @@ namespace Assets.Code.Model.Selling
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
 			}
 		}
+
+		private int? IndexOfFirstRemainingTime 
+			=> _remainingCookTimes
+				.Select((time, index) => new {time, index})
+				.FirstOrDefault(anon => anon.time.HasValue)
+				?.index;
 
 		private double GetProgress(int index)
 			=> 1 - ((double)(_remainingCookTimes[index]?.Ticks ?? 0) / CookTime.Ticks);
