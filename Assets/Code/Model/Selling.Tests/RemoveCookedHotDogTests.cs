@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Code.Model.Selling.Events;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Assets.Code.Model.Selling.Tests
@@ -7,6 +8,14 @@ namespace Assets.Code.Model.Selling.Tests
 	public class RemoveCookedHotDogTests : GrillTestFixture
 	{
 		protected override TimeSpan CookTime => TimeSpan.FromMinutes(5);
+
+		[Test]
+		public void RemoveHotDogWhenNoneAvailable()
+		{
+			Act_RemoveCookedHotDog();
+
+			Assert_EventNotObserved(new CookedHotDogRemovedEvent(0));
+		}
 
 		[Test]
 		public void CookAndRemoveHotDog()
