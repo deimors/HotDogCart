@@ -43,7 +43,7 @@ namespace Assets.Code.Model.Selling
 
 		public void RemoveCookedHotDog()
 		{
-			
+			_events.OnNext(new CookedHotDogRemovedEvent(0));
 		}
 
 		private double GetProgress(int index)
