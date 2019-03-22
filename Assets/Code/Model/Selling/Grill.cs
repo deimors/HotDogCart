@@ -41,6 +41,11 @@ namespace Assets.Code.Model.Selling
 			}
 		}
 
+		public void RemoveCookedHotDog()
+		{
+			
+		}
+
 		private double GetProgress(int index)
 			=> 1 - ((double)(_remainingCookTimes[index]?.Ticks ?? 0) / CookTime.Ticks);
 
@@ -54,6 +59,6 @@ namespace Assets.Code.Model.Selling
 			=> _remainingCookTimes[index] == TimeSpan.Zero;
 
 		private bool HasStartedCooking(int index)
-			=> _remainingCookTimes[index].HasValue;
+			=> _remainingCookTimes[index].HasValue;	
 	}
 }
