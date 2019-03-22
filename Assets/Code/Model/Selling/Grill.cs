@@ -14,19 +14,21 @@ namespace Assets.Code.Model.Selling
 
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
 
-		private int _nextIndex;
-
 		public void AddHotDog()
 		{
-			var index = _nextIndex++;
-			_remainingCookTimes[index] = CookTime;
+			var addIndex = _remainingCookTimes
+				.Select((time, index) => new { time, index })
+				.FirstOrDefault(anon => !anon.time.HasValue)
+				?.index;
 
-			_events.OnNext(new HotDogAddedEvent(index));
+			_remainingCookTimes[addIndex.Value] = CookTime;
+
+			_events.OnNext(new HotDogAddedEvent(addIndex.Value));
 		}
 
 		public void ProgressTime(TimeSpan duration)
 		{
-			foreach (var index in Enumerable.Range(0, _nextIndex))
+			foreach (var index in Enumerable.Range(0, _remainingCookTimes.Length))
 			{
 				if (!HasStartedCooking(index) || HasCompletedCooking(index)) continue;
 
