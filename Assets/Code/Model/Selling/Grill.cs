@@ -18,9 +18,12 @@ namespace Assets.Code.Model.Selling
 		{
 			var addIndex = IndexOfFirstEmptyRemainingTime;
 
-			_remainingCookTimes[addIndex.Value] = CookTime;
+			if (addIndex.HasValue)
+			{
+				_remainingCookTimes[addIndex.Value] = CookTime;
 
-			_events.OnNext(new HotDogAddedEvent(addIndex.Value));
+				_events.OnNext(new HotDogAddedEvent(addIndex.Value));
+			}
 		}
 		
 		public void ProgressTime(TimeSpan duration)
