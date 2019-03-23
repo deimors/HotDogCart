@@ -10,17 +10,17 @@ namespace Assets.Code.Model.Selling
 		private readonly ISubject<GrillEvent> _events = new Subject<GrillEvent>();
 		public IObservable<GrillEvent> Events => _events;
 
-		private readonly TimeSpan?[] _remainingCookTimes = new TimeSpan?[2];
+		private readonly TimeSpan?[] _cookingSlots = new TimeSpan?[2];
 
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
 
 		public void AddHotDog()
 		{
-			var addIndex = IndexOfFirstEmptyRemainingTime;
+			var addIndex = IndexOfFirstEmptySlot;
 
 			if (addIndex.HasValue)
 			{
-				_remainingCookTimes[addIndex.Value] = CookTime;
+				_cookingSlots[addIndex.Value] = CookTime;
 
 				_events.OnNext(new HotDogAddedEvent(addIndex.Value));
 			}
@@ -28,7 +28,7 @@ namespace Assets.Code.Model.Selling
 		
 		public void ProgressTime(TimeSpan duration)
 		{
-			foreach (var index in Enumerable.Range(0, _remainingCookTimes.Length))
+			foreach (var index in Enumerable.Range(0, _cookingSlots.Length))
 			{
 				if (!HasStartedCooking(index) || HasCompletedCooking(index)) continue;
 
@@ -45,40 +45,40 @@ namespace Assets.Code.Model.Selling
 
 		public void RemoveCookedHotDog()
 		{
-			var removeIndex = IndexOfFirstRemainingTime;
+			var removeIndex = IndexOfFirstNonEmptySlot;
 
 			if (removeIndex.HasValue && HasCompletedCooking(removeIndex.Value))
 			{
-				_remainingCookTimes[removeIndex.Value] = null;
+				_cookingSlots[removeIndex.Value] = null;
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
 			}
 		}
 
-		private int? IndexOfFirstRemainingTime 
-			=> _remainingCookTimes
+		private int? IndexOfFirstNonEmptySlot 
+			=> _cookingSlots
 				.Select((time, index) => new {time, index})
 				.FirstOrDefault(anon => anon.time.HasValue)
 				?.index;
 
-		private int? IndexOfFirstEmptyRemainingTime 
-			=> _remainingCookTimes
+		private int? IndexOfFirstEmptySlot 
+			=> _cookingSlots
 				.Select((time, index) => new { time, index })
 				.FirstOrDefault(anon => !anon.time.HasValue)
 				?.index;
 
 		private double GetProgress(int index)
-			=> 1 - ((double)(_remainingCookTimes[index]?.Ticks ?? 0) / CookTime.Ticks);
+			=> 1 - ((double)(_cookingSlots[index]?.Ticks ?? 0) / CookTime.Ticks);
 
 		private void DecreaseRemainingCookTime(int index, TimeSpan duration)
-			=> _remainingCookTimes[index] -= 
-				duration > _remainingCookTimes[index] 
-					? _remainingCookTimes[index] 
+			=> _cookingSlots[index] -= 
+				duration > _cookingSlots[index] 
+					? _cookingSlots[index] 
 					: duration;
 
 		private bool HasCompletedCooking(int index)
-			=> _remainingCookTimes[index] == TimeSpan.Zero;
+			=> _cookingSlots[index] == TimeSpan.Zero;
 
 		private bool HasStartedCooking(int index)
-			=> _remainingCookTimes[index].HasValue;	
+			=> _cookingSlots[index].HasValue;	
 	}
 }
