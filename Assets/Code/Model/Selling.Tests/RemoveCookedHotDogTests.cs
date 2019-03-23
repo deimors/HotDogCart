@@ -101,5 +101,40 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventNotObserved(Arg.Any<CookedHotDogRemovedEvent>());
 		}
+
+		[Test]
+		public void RemoveCookedHotDogIfAvailable()
+		{
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+
+			Act_RemoveCookedHotDog();
+
+			Act_AddHotDog();
+
+			Act_ProgressTime(HalfCookTime);
+
+			Act_RemoveCookedHotDog();
+
+			Assert_EventsObserved(
+				new HotDogAddedEvent(0),
+				new CookingProgressedEvent(0, .5f),
+				new HotDogAddedEvent(1),
+				new CookingProgressedEvent(0, 1),
+				new HotDogCookedEvent(0),
+				new CookingProgressedEvent(1, .5f),
+				new CookedHotDogRemovedEvent(0),
+				new HotDogAddedEvent(0),
+				new CookingProgressedEvent(0, .5f),
+				new CookingProgressedEvent(1, 1),
+				new HotDogCookedEvent(1),
+				new CookedHotDogRemovedEvent(1)
+			);
+		}
 	}
 }
