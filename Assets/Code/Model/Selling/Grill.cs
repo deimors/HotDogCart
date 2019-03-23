@@ -45,19 +45,19 @@ namespace Assets.Code.Model.Selling
 
 		public void RemoveCookedHotDog()
 		{
-			var removeIndex = IndexOfFirstNonEmptySlot;
+			var removeIndex = IndexOfFirstCookedSlot;
 
-			if (removeIndex.HasValue && HasCompletedCooking(removeIndex.Value))
+			if (removeIndex.HasValue)
 			{
 				_cookingSlots[removeIndex.Value] = null;
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
 			}
 		}
 
-		private int? IndexOfFirstNonEmptySlot 
+		private int? IndexOfFirstCookedSlot 
 			=> _cookingSlots
 				.Select((time, index) => new {time, index})
-				.FirstOrDefault(anon => anon.time.HasValue)
+				.FirstOrDefault(anon => anon.time.HasValue && HasCompletedCooking(anon.index))
 				?.index;
 
 		private int? IndexOfFirstEmptySlot 
