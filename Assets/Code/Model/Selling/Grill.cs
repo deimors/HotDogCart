@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Code.Model.Selling.Events;
 using UniRx;
@@ -28,21 +29,10 @@ namespace Assets.Code.Model.Selling
 		
 		public void ProgressTime(TimeSpan duration)
 		{
-			foreach (var index in Enumerable.Range(0, _cookingSlots.Length))
-			{
-				if (!HasStartedCooking(index) || HasCompletedCooking(index)) continue;
-
-				DecreaseRemainingCookTime(index, duration);
-
-				var progress = GetProgress(index);
-
-				_events.OnNext(new CookingProgressedEvent(index, (float)progress));
-
-				if (progress >= 1)
-					_events.OnNext(new HotDogCookedEvent(index));
-			}
+			foreach (var index in IndicesOfSlotsCurrentlyCooking)
+				ProgressCooking(duration, index);
 		}
-
+		
 		public void RemoveCookedHotDog()
 		{
 			var removeIndex = IndexOfFirstCookedSlot;
@@ -53,6 +43,11 @@ namespace Assets.Code.Model.Selling
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
 			}
 		}
+		
+		private IEnumerable<int> IndicesOfSlotsCurrentlyCooking
+			=> Enumerable
+				.Range(0, _cookingSlots.Length)
+				.Where(index => HasStartedCooking(index) && !HasCompletedCooking(index));
 
 		private int? IndexOfFirstCookedSlot 
 			=> _cookingSlots
@@ -65,6 +60,18 @@ namespace Assets.Code.Model.Selling
 				.Select((time, index) => new { time, index })
 				.FirstOrDefault(anon => !anon.time.HasValue)
 				?.index;
+
+		private void ProgressCooking(TimeSpan duration, int index)
+		{
+			DecreaseRemainingCookTime(index, duration);
+
+			var progress = GetProgress(index);
+
+			_events.OnNext(new CookingProgressedEvent(index, (float)progress));
+
+			if (progress >= 1)
+				_events.OnNext(new HotDogCookedEvent(index));
+		}
 
 		private double GetProgress(int index)
 			=> 1 - ((double)(_cookingSlots[index]?.Ticks ?? 0) / CookTime.Ticks);
