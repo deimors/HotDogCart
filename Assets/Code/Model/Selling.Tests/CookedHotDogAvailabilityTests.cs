@@ -36,5 +36,22 @@ namespace Assets.Code.Model.Selling.Tests
 				new HotDogCookedEvent(1)
 			);
 		}
+
+		[Test]
+		public void CookAndRemoveOne()
+		{
+			Act_AddHotDog();
+
+			Act_ProgressTime(CookTime);
+
+			Act_RemoveCookedHotDog();
+
+			Assert_EventsObserved(
+				new HotDogCookedEvent(0),
+				new CookedHotDogAvailableEvent(),
+				new CookedHotDogRemovedEvent(0),
+				new NoCookedHotDogsAvailableEvent()
+			);
+		}
 	}
 }
