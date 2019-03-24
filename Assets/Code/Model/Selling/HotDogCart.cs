@@ -10,6 +10,7 @@ namespace Assets.Code.Model.Selling
 
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 		private readonly ISubject<CustomersEvent> _customersEvents = new Subject<CustomersEvent>();
+		private readonly ISubject<GrillEvent> _grillEvents = new Subject<GrillEvent>();
 		
 		private TimeSpan? _remainingSaleTime;
 		private bool _customerWaiting;
@@ -37,7 +38,7 @@ namespace Assets.Code.Model.Selling
 
 		public IObserver<CustomersEvent> CustomersObserver => _customersEvents;
 
-		public IObserver<GrillEvent> GrillObserver { get; set; }
+		public IObserver<GrillEvent> GrillObserver => _grillEvents;
 
 		public void Sell()
 		{
