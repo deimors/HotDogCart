@@ -4,10 +4,12 @@ namespace Assets.Code.Model.Selling.Events
 {
 	public class CookingProgressedEvent : GrillEvent, IEquatable<CookingProgressedEvent>
 	{
+		public int Index { get; }
 		public float Progress { get; }
 
 		public CookingProgressedEvent(int index, float progress)
 		{
+			Index = index;
 			Progress = progress;
 		}
 
@@ -15,7 +17,7 @@ namespace Assets.Code.Model.Selling.Events
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return Progress.Equals(other.Progress);
+			return Index == other.Index && Progress.Equals(other.Progress);
 		}
 
 		public override bool Equals(object obj)
@@ -28,7 +30,10 @@ namespace Assets.Code.Model.Selling.Events
 
 		public override int GetHashCode()
 		{
-			return Progress.GetHashCode();
+			unchecked
+			{
+				return (Index * 397) ^ Progress.GetHashCode();
+			}
 		}
 
 		public static bool operator ==(CookingProgressedEvent left, CookingProgressedEvent right)

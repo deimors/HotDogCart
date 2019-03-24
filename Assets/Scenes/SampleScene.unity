@@ -1452,8 +1452,9 @@ GameObject:
   - component: {fileID: 1020430204}
   - component: {fileID: 1020430203}
   - component: {fileID: 1020430202}
+  - component: {fileID: 1020430205}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Add Hot Dog Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1558,6 +1559,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1020430200}
   m_CullTransparentMesh: 0
+--- !u!114 &1020430205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020430200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790021659dd6e3d419b9d304965816c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AddButton: {fileID: 1020430202}
 --- !u!1 &1137033649
 GameObject:
   m_ObjectHideFlags: 0
@@ -2251,6 +2265,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1813886955670122573, guid: b738ffab78b403f4581fb8a07848220f,
+        type: 3}
+      propertyPath: Index
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b738ffab78b403f4581fb8a07848220f, type: 3}

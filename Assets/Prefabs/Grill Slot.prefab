@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7669788596535131048}
   - component: {fileID: 7669788596535131049}
+  - component: {fileID: 1813886955670122573}
   m_Layer: 5
-  m_Name: Slot 0 Slider
+  m_Name: Grill Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,6 +89,21 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1813886955670122573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669788596535131055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 907d1ad8a80a4ba41b0c90d4ed3a6179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Index: 0
+  ProgressSlider: {fileID: 7669788596535131049}
+  SlotText: {fileID: 7669788596796419521}
 --- !u!1 &7669788596796419527
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,15 +6,27 @@ using Zenject;
 
 namespace Assets.Code.Integration
 {
-	public class HotDogCartTimePump
+	public class TimePump
 	{
 		private const float TimeScale = 30;
 
 		[Inject]
-		public void Initialize(HotDogCart cart)
+		public HotDogCart Cart { private get; set; }
+
+		[Inject]
+		public Grill Grill { private get; set; }
+
+		[Inject]
+		public void Initialize()
 			=> Observable.EveryUpdate()
 				.Select(_ => Time.deltaTime * TimeScale)
 				.Select(deltaTime => TimeSpan.FromSeconds(deltaTime))
-				.Subscribe(cart.ProgressTime);
+				.Subscribe(ProgressTime);
+
+		private void ProgressTime(TimeSpan span)
+		{
+			Cart.ProgressTime(span);
+			Grill.ProgressTime(span);
+		}
 	}
 }
