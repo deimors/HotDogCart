@@ -41,7 +41,9 @@ namespace Assets.Code.Model.Selling
 			{
 				_cookingSlots[removeIndex.Value] = null;
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
-				_events.OnNext(new NoCookedHotDogsAvailableEvent());
+
+				if (CookedHotDogCount == 0)
+					_events.OnNext(new NoCookedHotDogsAvailableEvent());
 			}
 		}
 		
