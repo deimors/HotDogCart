@@ -45,9 +45,10 @@ namespace Assets.Code.Model.Selling
 		}
 		
 		private IEnumerable<int> IndicesOfSlotsCurrentlyCooking
-			=> Enumerable
-				.Range(0, _cookingSlots.Length)
-				.Where(index => HasStartedCooking(index) && !HasCompletedCooking(index));
+			=> SlotIndices.Where(index => HasStartedCooking(index) && !HasCompletedCooking(index));
+
+		private IEnumerable<int> SlotIndices 
+			=> Enumerable.Range(0, _cookingSlots.Length);
 
 		private int? IndexOfFirstCookedSlot 
 			=> _cookingSlots
@@ -61,18 +62,21 @@ namespace Assets.Code.Model.Selling
 				.FirstOrDefault(anon => !anon.time.HasValue)
 				?.index;
 
+		private int CookedHotDogCount
+			=> SlotIndices.Count(HasCompletedCooking);
+
 		private void ProgressCooking(TimeSpan duration, int index)
 		{
 			DecreaseRemainingCookTime(index, duration);
 
-			var progress = GetProgress(index);
+			_events.OnNext(new CookingProgressedEvent(index, (float)GetProgress(index)));
 
-			_events.OnNext(new CookingProgressedEvent(index, (float)progress));
-
-			if (progress >= 1)
+			if (HasCompletedCooking(index))
 			{
 				_events.OnNext(new HotDogCookedEvent(index));
-				_events.OnNext(new CookedHotDogAvailableEvent());
+
+				if (CookedHotDogCount == 1)
+					_events.OnNext(new CookedHotDogAvailableEvent());
 			}
 		}
 
