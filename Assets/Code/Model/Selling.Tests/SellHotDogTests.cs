@@ -18,25 +18,25 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void SellAndProgressTimeOneMinute()
+		public void SellAvailableHotDogToWaitingCustomerAndProgressTimeFull()
 		{
 			Arrange_CustomersEvent(new LineNotEmptyEvent());
+			Arrange_GrillEvent(new CookedHotDogsAvailableEvent());
 
 			Act_Sell();
 
-			var duration = TimeSpan.FromMinutes(1);
-			Act_ProgressTime(duration);
+			Act_ProgressTime(SellTime);
 
 			Assert_EventsObserved(
 				new CanSellEvent(),
 				new SaleStartedEvent(),
 				new CantSellEvent(),
-				new TimeProgressedEvent(duration),
+				new TimeProgressedEvent(SellTime),
 				new SaleCompletedEvent(),
 				new CanSellEvent()
 			);
 		}
-		
+
 		[Test]
 		public void DontSellAndProgressTimeOneMinute()
 		{

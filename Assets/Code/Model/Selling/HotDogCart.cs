@@ -36,7 +36,9 @@ namespace Assets.Code.Model.Selling
 		public IObservable<HotDogCartEvent> Events => _events;
 
 		public IObserver<CustomersEvent> CustomersObserver => _customersEvents;
-		
+
+		public IObserver<GrillEvent> GrillObserver { get; set; }
+
 		public void Sell()
 		{
 			if (IsSaleActive || !_customerWaiting)

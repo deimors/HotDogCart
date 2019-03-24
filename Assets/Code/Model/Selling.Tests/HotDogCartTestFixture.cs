@@ -28,5 +28,8 @@ namespace Assets.Code.Model.Selling.Tests
 
 		protected void Act_ProgressTime(TimeSpan duration)
 			=> _pos.ProgressTime(duration);
+
+		protected void Arrange_GrillEvent(GrillEvent grillEvent)
+			=> _pos.GrillObserver.OnNext(grillEvent);
 	}
 }
