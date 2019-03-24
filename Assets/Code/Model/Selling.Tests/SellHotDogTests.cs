@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Code.Model.Selling.Events;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Assets.Code.Model.Selling.Tests
@@ -35,6 +36,17 @@ namespace Assets.Code.Model.Selling.Tests
 				new SaleCompletedEvent(),
 				new CanSellEvent()
 			);
+		}
+
+		[Test]
+		public void SellWhenNoCookedHotDogAvailable()
+		{
+			Arrange_CustomersEvent(new LineNotEmptyEvent());
+
+			Act_Sell();
+
+			Assert_EventNotObserved(Arg.Any<CanSellEvent>());
+			Assert_EventNotObserved(Arg.Any<SaleStartedEvent>());
 		}
 
 		[Test]
