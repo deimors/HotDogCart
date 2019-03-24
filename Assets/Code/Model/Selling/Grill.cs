@@ -70,7 +70,10 @@ namespace Assets.Code.Model.Selling
 			_events.OnNext(new CookingProgressedEvent(index, (float)progress));
 
 			if (progress >= 1)
+			{
 				_events.OnNext(new HotDogCookedEvent(index));
+				_events.OnNext(new CookedHotDogAvailableEvent());
+			}
 		}
 
 		private double GetProgress(int index)
