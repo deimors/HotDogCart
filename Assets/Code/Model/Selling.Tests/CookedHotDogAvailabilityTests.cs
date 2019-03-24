@@ -7,11 +7,10 @@ namespace Assets.Code.Model.Selling.Tests
 {
 	public class CookedHotDogAvailabilityTests : GrillTestFixture
 	{
-		private static readonly TimeSpan HalfCookTime = TimeSpan.FromMinutes(2.5);
 		protected override TimeSpan CookTime => TimeSpan.FromMinutes(5);
 
 		[Test]
-		public void CookOneCompletely()
+		public void CookOne()
 		{
 			Act_AddHotDog();
 
@@ -19,12 +18,12 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
-				new CookedHotDogAvailableEvent()
+				new CookedHotDogsAvailableEvent()
 			);
 		}
 
 		[Test]
-		public void CookTwoCompletely()
+		public void CookTwo()
 		{
 			Act_AddHotDog();
 			Act_AddHotDog();
@@ -33,7 +32,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
-				new CookedHotDogAvailableEvent(),
+				new CookedHotDogsAvailableEvent(),
 				new HotDogCookedEvent(1)
 			);
 		}
@@ -49,7 +48,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
-				new CookedHotDogAvailableEvent(),
+				new CookedHotDogsAvailableEvent(),
 				new CookedHotDogRemovedEvent(0),
 				new NoCookedHotDogsAvailableEvent()
 			);
@@ -67,7 +66,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
-				new CookedHotDogAvailableEvent()
+				new CookedHotDogsAvailableEvent()
 			);
 
 			Assert_EventNotObserved(Arg.Any<NoCookedHotDogsAvailableEvent>());
@@ -86,7 +85,7 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
-				new CookedHotDogAvailableEvent(),
+				new CookedHotDogsAvailableEvent(),
 				new HotDogCookedEvent(1),
 				new CookedHotDogRemovedEvent(0),
 				new CookedHotDogRemovedEvent(1),

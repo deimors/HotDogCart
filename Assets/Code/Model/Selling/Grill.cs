@@ -79,7 +79,7 @@ namespace Assets.Code.Model.Selling
 				_events.OnNext(new HotDogCookedEvent(index));
 
 				if (CookedHotDogCount == 1)
-					_events.OnNext(new CookedHotDogAvailableEvent());
+					_events.OnNext(new CookedHotDogsAvailableEvent());
 			}
 		}
 
