@@ -72,5 +72,26 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventNotObserved(Arg.Any<NoCookedHotDogsAvailableEvent>());
 		}
+
+		[Test]
+		public void CookTwoAndRemoveTwo()
+		{
+			Act_AddHotDog();
+			Act_AddHotDog();
+
+			Act_ProgressTime(CookTime);
+
+			Act_RemoveCookedHotDog();
+			Act_RemoveCookedHotDog();
+
+			Assert_EventsObserved(
+				new HotDogCookedEvent(0),
+				new CookedHotDogAvailableEvent(),
+				new HotDogCookedEvent(1),
+				new CookedHotDogRemovedEvent(0),
+				new CookedHotDogRemovedEvent(1),
+				new NoCookedHotDogsAvailableEvent()
+			);
+		}
 	}
 }
