@@ -14,6 +14,7 @@ namespace Assets.Code.Model.Selling
 		
 		private TimeSpan? _remainingSaleTime;
 		private bool _customerWaiting;
+		private bool _cookedHotDogAvailable;
 
 		public HotDogCart(TimeSpan sellTime)
 		{
@@ -25,13 +26,17 @@ namespace Assets.Code.Model.Selling
 				{
 					_customerWaiting = true;
 
-					if (!IsSaleActive)
+					if (!IsSaleActive && _cookedHotDogAvailable)
 						_events.OnNext(new CanSellEvent());
 				});
 
 			_customersEvents
 				.OfType<CustomersEvent, LineEmptyEvent>()
 				.Subscribe(_ => _customerWaiting = false);
+
+			_grillEvents
+				.OfType<GrillEvent, CookedHotDogsAvailableEvent>()
+				.Subscribe(_ => _cookedHotDogAvailable = true);
 		}
 
 		public IObservable<HotDogCartEvent> Events => _events;
@@ -42,7 +47,7 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			if (IsSaleActive || !_customerWaiting)
+			if (IsSaleActive || !_customerWaiting || !_cookedHotDogAvailable)
 				return;
 
 			StartSale();
