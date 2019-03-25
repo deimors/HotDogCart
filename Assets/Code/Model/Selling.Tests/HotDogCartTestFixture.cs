@@ -31,5 +31,11 @@ namespace Assets.Code.Model.Selling.Tests
 
 		protected void Arrange_GrillEvent(GrillEvent grillEvent)
 			=> _pos.GrillObserver.OnNext(grillEvent);
+
+		protected void Arrange_SellConditionsMet()
+		{
+			Arrange_GrillEvent(new CookedHotDogsAvailableEvent());
+			Arrange_CustomersEvent(new LineNotEmptyEvent());
+		}
 	}
 }
