@@ -9,8 +9,8 @@ namespace Assets.Code.Model.Selling.Tests
 	{
 		private void Arrange_CustomerAndHotDogAvailable()
 		{
-			Arrange_GrillEvent(new CookedHotDogsAvailableEvent());
 			Arrange_CustomersEvent(new LineNotEmptyEvent());
+			Arrange_GrillEvent(new CookedHotDogsAvailableEvent());
 		}
 
 		[Test]
