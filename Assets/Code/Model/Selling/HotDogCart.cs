@@ -36,7 +36,13 @@ namespace Assets.Code.Model.Selling
 
 			_grillEvents
 				.OfType<GrillEvent, CookedHotDogsAvailableEvent>()
-				.Subscribe(_ => _cookedHotDogAvailable = true);
+				.Subscribe(_ =>
+				{
+					_cookedHotDogAvailable = true;
+
+					if (!IsSaleActive && _customerWaiting)
+						_events.OnNext(new CanSellEvent());
+				});
 		}
 
 		public IObservable<HotDogCartEvent> Events => _events;
