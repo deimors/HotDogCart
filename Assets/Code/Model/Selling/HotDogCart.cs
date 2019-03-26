@@ -11,39 +11,50 @@ namespace Assets.Code.Model.Selling
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 		private readonly ISubject<CustomersEvent> _customersEvents = new Subject<CustomersEvent>();
 		private readonly ISubject<GrillEvent> _grillEvents = new Subject<GrillEvent>();
+
+		private readonly ISubject<bool> _saleActive = new Subject<bool>();
 		
 		private TimeSpan? _remainingSaleTime;
-		private bool _customerWaiting;
+
+		private bool _customerAvailable;
 		private bool _cookedHotDogAvailable;
 
 		public HotDogCart(TimeSpan sellTime)
 		{
 			_sellTime = sellTime;
 
-			_customersEvents
-				.OfType<CustomersEvent, LineNotEmptyEvent>()
-				.Subscribe(_ =>
-				{
-					_customerWaiting = true;
+			CustomersAvailable.Subscribe(available => _customerAvailable = available);
 
-					if (!IsSaleActive && _cookedHotDogAvailable)
-						_events.OnNext(new CanSellEvent());
-				});
+			HotDogsAvailable.Subscribe(available => _cookedHotDogAvailable = available);
 
-			_customersEvents
-				.OfType<CustomersEvent, LineEmptyEvent>()
-				.Subscribe(_ => _customerWaiting = false);
-
-			_grillEvents
-				.OfType<GrillEvent, CookedHotDogsAvailableEvent>()
-				.Subscribe(_ =>
-				{
-					_cookedHotDogAvailable = true;
-
-					if (!IsSaleActive && _customerWaiting)
-						_events.OnNext(new CanSellEvent());
-				});
+			CustomersAvailable
+				.CombineLatest(HotDogsAvailable, _saleActive, (customer, hotDog, saleActive) => customer && hotDog && !saleActive)
+				.DistinctUntilChanged()
+				.Select(canSell => canSell ? new CanSellEvent() as HotDogCartEvent : new CantSellEvent())
+				.Subscribe(_events);
+			
+			_saleActive.OnNext(false);
 		}
+
+		private IObservable<bool> HotDogsAvailable 
+			=> _grillEvents
+				.OfType<GrillEvent, CookedHotDogsAvailableEvent>()
+				.Select(_ => true)
+				.Merge(
+					_grillEvents
+						.OfType<GrillEvent, NoCookedHotDogsAvailableEvent>()
+						.Select(_ => false)
+				);
+
+		private IObservable<bool> CustomersAvailable 
+			=> _customersEvents
+				.OfType<CustomersEvent, LineNotEmptyEvent>()
+				.Select(_ => true)
+				.Merge(
+					_customersEvents
+						.OfType<CustomersEvent, LineEmptyEvent>()
+						.Select(_ => false)
+				);
 
 		public IObservable<HotDogCartEvent> Events => _events;
 
@@ -53,12 +64,11 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			if (IsSaleActive || !_customerWaiting || !_cookedHotDogAvailable)
+			if (IsSaleActive || !_customerAvailable || !_cookedHotDogAvailable)
 				return;
 
 			StartSale();
 			_events.OnNext(new SaleStartedEvent());
-			_events.OnNext(new CantSellEvent());
 		}
 		
 		public void ProgressTime(TimeSpan duration)
@@ -78,9 +88,6 @@ namespace Assets.Code.Model.Selling
 			CompleteSale();
 			
 			_events.OnNext(new SaleCompletedEvent());
-
-			if (_customerWaiting)
-				_events.OnNext(new CanSellEvent());
 		}
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
@@ -88,10 +95,16 @@ namespace Assets.Code.Model.Selling
 		private bool IsTimeRemainingInSale => _remainingSaleTime > TimeSpan.Zero;
 
 		private void StartSale()
-			=> _remainingSaleTime = _sellTime;
+		{
+			_remainingSaleTime = _sellTime;
+			_saleActive.OnNext(IsSaleActive);
+		}
 
 		private void CompleteSale()
-			=> _remainingSaleTime = null;
+		{
+			_remainingSaleTime = null;
+			_saleActive.OnNext(IsSaleActive);
+		}
 
 		private void ReduceRemainingSaleTime(TimeSpan duration)
 			=> _remainingSaleTime -= duration;

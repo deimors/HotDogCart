@@ -35,11 +35,11 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new CanSellEvent(),
-				new SaleStartedEvent(),
 				new CantSellEvent(),
+				new SaleStartedEvent(),
 				new TimeProgressedEvent(SellTime),
-				new SaleCompletedEvent(),
-				new CanSellEvent()
+				new CanSellEvent(),
+				new SaleCompletedEvent()
 			);
 		}
 
@@ -233,10 +233,10 @@ namespace Assets.Code.Model.Selling.Tests
 
 			Assert_EventsObserved(
 				new CanSellEvent(),
-				new SaleStartedEvent(),
 				new CantSellEvent(),
-				new SaleCompletedEvent(),
-				new CanSellEvent()
+				new SaleStartedEvent(),
+				new CanSellEvent(),
+				new SaleCompletedEvent()
 			);
 		}
 	}
