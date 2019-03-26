@@ -63,14 +63,12 @@ namespace Assets.Code.Model.Selling
 		public IObserver<GrillEvent> GrillObserver => _grillEvents;
 
 		public void Sell()
-		{
-			if (!_canSell)
-				return;
+			=> Observable.Create<Unit>(observer => { observer.OnNext(Unit.Default); return Disposable.Empty; })
+				.Where(_ => _canSell)
+				.Do(_ => StartSale())
+				.Select(_ => new SaleStartedEvent())
+				.Subscribe(_events);
 
-			StartSale();
-			_events.OnNext(new SaleStartedEvent());
-		}
-		
 		public void ProgressTime(TimeSpan duration)
 		{
 			_events.OnNext(new TimeProgressedEvent(TimeSpan.FromMinutes(1)));
