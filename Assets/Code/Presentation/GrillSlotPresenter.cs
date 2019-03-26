@@ -22,7 +22,7 @@ namespace Assets.Code.Presentation
 		[Inject]
 		public void Initialize()
 		{
-			SlotText.text = "Empty";
+			ShowEmptySlot();
 
 			GrillEvents<HotDogAddedEvent>()
 				.Where(e => e.Index == Index)
@@ -35,6 +35,16 @@ namespace Assets.Code.Presentation
 			GrillEvents<HotDogCookedEvent>()
 				.Where(e => e.Index == Index)
 				.Subscribe(_ => SlotText.text = "Cooked");
+
+			GrillEvents<CookedHotDogRemovedEvent>()
+				.Where(e => e.Index == Index)
+				.Subscribe(_ => ShowEmptySlot());
+		}
+
+		private void ShowEmptySlot()
+		{
+			SlotText.text = "Empty";
+			ProgressSlider.value = 0;
 		}
 
 		private IObservable<TEvent> GrillEvents<TEvent>() where TEvent : GrillEvent
