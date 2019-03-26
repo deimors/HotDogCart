@@ -16,20 +16,20 @@ namespace Assets.Code.Model.Selling
 		
 		private TimeSpan? _remainingSaleTime;
 
-		private bool _customerAvailable;
-		private bool _cookedHotDogAvailable;
+		private bool _canSell;
 
 		public HotDogCart(TimeSpan sellTime)
 		{
 			_sellTime = sellTime;
 
-			CustomersAvailable.Subscribe(available => _customerAvailable = available);
-
-			HotDogsAvailable.Subscribe(available => _cookedHotDogAvailable = available);
-
-			CustomersAvailable
+			var canSellStream = CustomersAvailable
 				.CombineLatest(HotDogsAvailable, _saleActive, (customer, hotDog, saleActive) => customer && hotDog && !saleActive)
-				.DistinctUntilChanged()
+				.DistinctUntilChanged();
+
+			canSellStream
+				.Subscribe(canSell => _canSell = canSell);
+
+			canSellStream
 				.Select(canSell => canSell ? new CanSellEvent() as HotDogCartEvent : new CantSellEvent())
 				.Subscribe(_events);
 			
@@ -64,7 +64,7 @@ namespace Assets.Code.Model.Selling
 
 		public void Sell()
 		{
-			if (IsSaleActive || !_customerAvailable || !_cookedHotDogAvailable)
+			if (!_canSell)
 				return;
 
 			StartSale();
