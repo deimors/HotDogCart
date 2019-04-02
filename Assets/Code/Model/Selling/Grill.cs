@@ -24,6 +24,9 @@ namespace Assets.Code.Model.Selling
 				_cookingSlots[addIndex.Value] = CookTime;
 
 				_events.OnNext(new HotDogAddedEvent(addIndex.Value));
+
+				if (addIndex == _cookingSlots.Length - 1)
+					_events.OnNext(new CantAddHotDogEvent());
 			}
 		}
 		
