@@ -31,5 +31,20 @@ namespace Assets.Code.Model.Selling.Tests
 				new CanAddHotDogEvent()
 			);
 		}
+
+		[Test]
+		public void AddTwoAndRemoveTwo()
+		{
+			Act_AddHotDog();
+			Act_AddHotDog();
+
+			Act_RemoveCookedHotDog();
+			Act_RemoveCookedHotDog();
+
+			Assert_EventsObserved(
+				new CantAddHotDogEvent(),
+				new CanAddHotDogEvent()
+			);
+		}
 	}
 }
