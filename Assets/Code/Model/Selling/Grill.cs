@@ -38,6 +38,8 @@ namespace Assets.Code.Model.Selling
 		
 		public void RemoveCookedHotDog()
 		{
+			_events.OnNext(new CanAddHotDogEvent());
+
 			var removeIndex = IndexOfFirstCookedSlot;
 
 			if (removeIndex.HasValue)
