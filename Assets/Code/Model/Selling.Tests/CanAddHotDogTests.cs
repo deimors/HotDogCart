@@ -63,5 +63,24 @@ namespace Assets.Code.Model.Selling.Tests
 				new CanAddHotDogEvent()
 			);
 		}
+
+		[Test]
+		public void AddToFirstSlotToFill()
+		{
+			Act_AddHotDog();
+			Act_AddHotDog();
+
+			Act_ProgressTime(CookTime);
+
+			Act_RemoveCookedHotDog();
+			
+			Act_AddHotDog();
+
+			Assert_EventsObserved(
+				new CantAddHotDogEvent(),
+				new CanAddHotDogEvent(),
+				new CantAddHotDogEvent()
+			);
+		}
 	}
 }
