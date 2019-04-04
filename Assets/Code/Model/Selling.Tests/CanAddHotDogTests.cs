@@ -8,7 +8,7 @@ namespace Assets.Code.Model.Selling.Tests
 	public class CanAddHotDogTests : GrillTestFixture
 	{
 		private static readonly TimeSpan HalfCookTime = TimeSpan.FromMinutes(2.5);
-		protected override TimeSpan CookTime { get; }
+		protected override TimeSpan CookTime => TimeSpan.FromMinutes(5);
 
 		[Test]
 		public void AddTwoHotDogs()

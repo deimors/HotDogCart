@@ -38,12 +38,13 @@ namespace Assets.Code.Model.Selling
 		
 		public void RemoveCookedHotDog()
 		{
-			_events.OnNext(new CanAddHotDogEvent());
-
 			var removeIndex = IndexOfFirstCookedSlot;
-
+			
 			if (removeIndex.HasValue)
 			{
+				if (EmptySlotCount == 0)
+					_events.OnNext(new CanAddHotDogEvent());
+
 				_cookingSlots[removeIndex.Value] = null;
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
 
@@ -72,6 +73,9 @@ namespace Assets.Code.Model.Selling
 
 		private int CookedHotDogCount
 			=> SlotIndices.Count(HasCompletedCooking);
+
+		private int EmptySlotCount
+			=> SlotIndices.Count(index => !HasStartedCooking(index));
 
 		private void ProgressCooking(TimeSpan duration, int index)
 		{
