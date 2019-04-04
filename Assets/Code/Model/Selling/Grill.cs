@@ -25,7 +25,7 @@ namespace Assets.Code.Model.Selling
 
 				_events.OnNext(new HotDogAddedEvent(addIndex.Value));
 
-				if (addIndex == _cookingSlots.Length - 1)
+				if (EmptySlotCount == 0)
 					_events.OnNext(new CantAddHotDogEvent());
 			}
 		}
