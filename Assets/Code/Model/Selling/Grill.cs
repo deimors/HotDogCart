@@ -42,11 +42,11 @@ namespace Assets.Code.Model.Selling
 			
 			if (removeIndex.HasValue)
 			{
-				if (EmptySlotCount == 0)
-					_events.OnNext(new CanAddHotDogEvent());
-
 				_cookingSlots[removeIndex.Value] = null;
 				_events.OnNext(new CookedHotDogRemovedEvent(removeIndex.Value));
+
+				if (EmptySlotCount == 1)
+					_events.OnNext(new CanAddHotDogEvent());
 
 				if (CookedHotDogCount == 0)
 					_events.OnNext(new NoCookedHotDogsAvailableEvent());
