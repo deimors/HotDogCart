@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Code.Model.Selling.Events;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Assets.Code.Model.Selling.Tests
@@ -19,10 +20,24 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void AddTwoAndRemoveOne()
+		public void AddTwoThenRemoveOne()
 		{
 			Act_AddHotDog();
 			Act_AddHotDog();
+
+			Act_RemoveCookedHotDog();
+
+			Assert_EventNotObserved(Arg.Any<CanAddHotDogEvent>());
+			Assert_EventNotObserved(Arg.Any<CookedHotDogRemovedEvent>());
+		}
+
+		[Test]
+		public void CookTwoThenRemoveOne()
+		{
+			Act_AddHotDog();
+			Act_AddHotDog();
+
+			Act_ProgressTime(CookTime);
 
 			Act_RemoveCookedHotDog();
 
@@ -33,10 +48,12 @@ namespace Assets.Code.Model.Selling.Tests
 		}
 
 		[Test]
-		public void AddTwoAndRemoveTwo()
+		public void CookTwoThenRemoveTwo()
 		{
 			Act_AddHotDog();
 			Act_AddHotDog();
+
+			Act_ProgressTime(CookTime);
 
 			Act_RemoveCookedHotDog();
 			Act_RemoveCookedHotDog();
