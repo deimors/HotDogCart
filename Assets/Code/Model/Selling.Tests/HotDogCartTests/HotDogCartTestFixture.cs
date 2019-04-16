@@ -23,15 +23,18 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 		protected void Arrange_CustomersEvent(CustomersEvent customersEvent)
 			=> _pos.CustomersObserver.OnNext(customersEvent);
 
-		protected void Act_Sell()
-			=> _pos.Sell();
+		protected void Arrange_TimeProgressed(TimeSpan duration)
+			=> Arrange_TimeEvent(new TimeProgressedEvent(duration));
 
-		protected void Act_ProgressTime(TimeSpan duration)
-			=> _pos.ProgressTime(duration);
+		private void Arrange_TimeEvent(TimeEvent timeEvent)
+			=> _pos.TimeObserver.OnNext(timeEvent);
 
 		protected void Arrange_GrillEvent(GrillEvent grillEvent)
 			=> _pos.GrillObserver.OnNext(grillEvent);
 
+		protected void Act_Sell()
+			=> _pos.Sell();
+		
 		protected void Arrange_SellConditionsMet()
 		{
 			Arrange_GrillEvent(new CookedHotDogsAvailableEvent());

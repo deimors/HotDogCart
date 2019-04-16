@@ -31,7 +31,7 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Act_Sell();
 
-			Act_ProgressTime(SellTime);
+			Arrange_TimeProgressed(SellTime);
 
 			Assert_EventsObserved(
 				new CanSellEvent(),
@@ -58,8 +58,7 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 		{
 			Arrange_CustomerAndHotDogAvailable();
 
-			var duration = TimeSpan.FromMinutes(1);
-			Act_ProgressTime(duration);
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Assert_EventNotObserved(new SaleCompletedEvent());
 		}
@@ -71,9 +70,9 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Assert_EventObserved(new SaleCompletedEvent(), 1);
 		}
@@ -85,7 +84,7 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromSeconds(30));
+			Arrange_TimeProgressed(TimeSpan.FromSeconds(30));
 
 			Assert_EventNotObserved(new SaleCompletedEvent());
 		}
@@ -97,13 +96,13 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromSeconds(30));
+			Arrange_TimeProgressed(TimeSpan.FromSeconds(30));
 
 			Arrange_CustomerAndHotDogAvailable();
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromSeconds(30));
+			Arrange_TimeProgressed(TimeSpan.FromSeconds(30));
 
 			Assert_EventObserved(new SaleStartedEvent(), 1);
 			Assert_EventObserved(new SaleCompletedEvent());
@@ -118,8 +117,8 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			var halfMinute = TimeSpan.FromSeconds(30);
 
-			Act_ProgressTime(halfMinute);
-			Act_ProgressTime(halfMinute);
+			Arrange_TimeProgressed(halfMinute);
+			Arrange_TimeProgressed(halfMinute);
 
 			Assert_EventsObserved(
 				new SaleStartedEvent(),
@@ -146,11 +145,11 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Arrange_CustomersEvent(new LineEmptyEvent());
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Assert_EventObserved(new SaleStartedEvent(), 1);
 			Assert_EventObserved(new SaleCompletedEvent(), 1);
@@ -163,13 +162,13 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Arrange_CustomerAndHotDogAvailable();
 
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Assert_EventsObserved(
 				new SaleStartedEvent(),
@@ -188,11 +187,11 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Arrange_CustomerAndHotDogAvailable();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 			
 			Act_Sell();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Assert_EventsObserved(
 				new SaleStartedEvent(),
@@ -227,7 +226,7 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 
 			Arrange_CustomerAndHotDogAvailable();
 
-			Act_ProgressTime(TimeSpan.FromMinutes(1));
+			Arrange_TimeProgressed(TimeSpan.FromMinutes(1));
 
 			Assert_EventsObserved(
 				new CanSellEvent(),

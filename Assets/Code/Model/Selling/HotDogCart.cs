@@ -11,13 +11,14 @@ namespace Assets.Code.Model.Selling
 		private readonly ISubject<HotDogCartEvent> _events = new Subject<HotDogCartEvent>();
 		private readonly ISubject<CustomersEvent> _customersEvents = new Subject<CustomersEvent>();
 		private readonly ISubject<GrillEvent> _grillEvents = new Subject<GrillEvent>();
+		private readonly ISubject<TimeEvent> _timeEvents = new Subject<TimeEvent>();
 
 		private readonly ISubject<bool> _saleActive = new Subject<bool>();
 		
 		private TimeSpan? _remainingSaleTime;
 
 		private bool _canSell;
-
+		
 		public HotDogCart(TimeSpan sellTime)
 		{
 			_sellTime = sellTime;
@@ -32,6 +33,11 @@ namespace Assets.Code.Model.Selling
 			canSellStream
 				.Select(canSell => canSell ? new CanSellEvent() as HotDogCartEvent : new CantSellEvent())
 				.Subscribe(_events);
+
+			_timeEvents
+				.OfType<TimeEvent, TimeProgressedEvent>()
+				.Select(e => e.Duration)
+				.Subscribe(ProgressTime);
 			
 			_saleActive.OnNext(false);
 		}
@@ -62,6 +68,8 @@ namespace Assets.Code.Model.Selling
 
 		public IObserver<GrillEvent> GrillObserver => _grillEvents;
 
+		public IObserver<TimeEvent> TimeObserver => _timeEvents;
+
 		public void Sell()
 			=> Observable.Create<Unit>(observer => { observer.OnNext(Unit.Default); return Disposable.Empty; })
 				.Where(_ => _canSell)
@@ -69,7 +77,7 @@ namespace Assets.Code.Model.Selling
 				.Select(_ => new SaleStartedEvent())
 				.Subscribe(_events);
 
-		public void ProgressTime(TimeSpan duration)
+		private void ProgressTime(TimeSpan duration)
 		{
 			if (!IsSaleActive)
 				return;

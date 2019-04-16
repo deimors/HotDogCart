@@ -2,7 +2,7 @@
 
 namespace Assets.Code.Model.Selling.Events
 {
-	public class TimeProgressedEvent : HotDogCartEvent, IEquatable<TimeProgressedEvent>
+	public class TimeProgressedEvent : TimeEvent, IEquatable<TimeProgressedEvent>
 	{
 		public TimeSpan Duration { get; }
 
