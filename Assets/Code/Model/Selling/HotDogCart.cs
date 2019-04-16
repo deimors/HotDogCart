@@ -71,8 +71,6 @@ namespace Assets.Code.Model.Selling
 
 		public void ProgressTime(TimeSpan duration)
 		{
-			_events.OnNext(new TimeProgressedEvent(TimeSpan.FromMinutes(1)));
-			
 			if (!IsSaleActive)
 				return;
 

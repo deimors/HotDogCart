@@ -37,7 +37,6 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 				new CanSellEvent(),
 				new CantSellEvent(),
 				new SaleStartedEvent(),
-				new TimeProgressedEvent(SellTime),
 				new CanSellEvent(),
 				new SaleCompletedEvent()
 			);
@@ -62,7 +61,6 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 			var duration = TimeSpan.FromMinutes(1);
 			Act_ProgressTime(duration);
 
-			Assert_EventObserved(new TimeProgressedEvent(duration));
 			Assert_EventNotObserved(new SaleCompletedEvent());
 		}
 
