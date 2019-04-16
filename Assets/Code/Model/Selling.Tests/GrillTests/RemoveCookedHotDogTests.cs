@@ -23,7 +23,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		{
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 
@@ -41,7 +41,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 			Act_AddHotDog();
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 			Act_RemoveCookedHotDog();
@@ -63,13 +63,13 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		{
 			Act_AddHotDog();
 			
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 
@@ -90,7 +90,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		{
 			Act_AddHotDog();
 
-			Act_ProgressTime(HalfCookTime);
+			Arrange_TimeProgressed(HalfCookTime);
 
 			Act_RemoveCookedHotDog();
 
@@ -107,17 +107,17 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		{
 			Act_AddHotDog();
 
-			Act_ProgressTime(HalfCookTime);
+			Arrange_TimeProgressed(HalfCookTime);
 
 			Act_AddHotDog();
 
-			Act_ProgressTime(HalfCookTime);
+			Arrange_TimeProgressed(HalfCookTime);
 
 			Act_RemoveCookedHotDog();
 
 			Act_AddHotDog();
 
-			Act_ProgressTime(HalfCookTime);
+			Arrange_TimeProgressed(HalfCookTime);
 
 			Act_RemoveCookedHotDog();
 

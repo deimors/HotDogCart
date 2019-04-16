@@ -22,8 +22,11 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 
 		protected override IObservable<GrillEvent> Observable => _grill.Events;
 
-		protected void Act_ProgressTime(TimeSpan duration)
-			=> _grill.ProgressTime(duration);
+		protected void Arrange_TimeProgressed(TimeSpan duration)
+			=> Arrange_TimeEvent(new TimeProgressedEvent(duration));
+
+		protected void Arrange_TimeEvent(TimeEvent timeEvent)
+			=> _grill.TimeObserver.OnNext(timeEvent);
 
 		protected void Act_AddHotDog()
 			=> _grill.AddHotDog();

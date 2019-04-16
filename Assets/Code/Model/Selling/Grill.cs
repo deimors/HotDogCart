@@ -9,11 +9,23 @@ namespace Assets.Code.Model.Selling
 	public class Grill
 	{
 		private readonly ISubject<GrillEvent> _events = new Subject<GrillEvent>();
+		private readonly ISubject<TimeEvent> _timeEvents = new Subject<TimeEvent>();
+
 		public IObservable<GrillEvent> Events => _events;
+
+		public IObserver<TimeEvent> TimeObserver => _timeEvents;
 
 		private readonly TimeSpan?[] _cookingSlots = new TimeSpan?[2];
 
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
+
+		public Grill()
+		{
+			_timeEvents
+				.OfType<TimeEvent, TimeProgressedEvent>()
+				.Select(e => e.Duration)
+				.Subscribe(ProgressTime);
+		}
 
 		public void AddHotDog()
 		{
@@ -28,12 +40,6 @@ namespace Assets.Code.Model.Selling
 				if (EmptySlotCount == 0)
 					_events.OnNext(new CantAddHotDogEvent());
 			}
-		}
-		
-		public void ProgressTime(TimeSpan duration)
-		{
-			foreach (var index in IndicesOfSlotsCurrentlyCooking)
-				ProgressCooking(duration, index);
 		}
 		
 		public void RemoveCookedHotDog()
@@ -52,7 +58,13 @@ namespace Assets.Code.Model.Selling
 					_events.OnNext(new NoCookedHotDogsAvailableEvent());
 			}
 		}
-		
+
+		private void ProgressTime(TimeSpan duration)
+		{
+			foreach (var index in IndicesOfSlotsCurrentlyCooking)
+				ProgressCooking(duration, index);
+		}
+
 		private IEnumerable<int> IndicesOfSlotsCurrentlyCooking
 			=> SlotIndices.Where(index => HasStartedCooking(index) && !HasCompletedCooking(index));
 

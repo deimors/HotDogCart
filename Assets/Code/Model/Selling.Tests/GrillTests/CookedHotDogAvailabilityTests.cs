@@ -14,7 +14,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		{
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
@@ -28,7 +28,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 			Act_AddHotDog();
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Assert_EventsObserved(
 				new HotDogCookedEvent(0),
@@ -42,7 +42,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		{
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 
@@ -60,7 +60,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 			Act_AddHotDog();
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 
@@ -78,7 +78,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 			Act_AddHotDog();
 			Act_AddHotDog();
 
-			Act_ProgressTime(CookTime);
+			Arrange_TimeProgressed(CookTime);
 
 			Act_RemoveCookedHotDog();
 			Act_RemoveCookedHotDog();
