@@ -2,7 +2,7 @@
 using Assets.Code.Model.Selling.Events;
 using NUnit.Framework;
 
-namespace Assets.Code.Model.Selling.Tests
+namespace Assets.Code.Model.Selling.Tests.CustomersTests
 {
 	public abstract class CustomersTestFixture : ObserverTestFixture<CustomersEvent>
 	{

@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using Assets.Code.Model.Selling.Events;
+using NUnit.Framework;
 
-namespace Assets.Code.Model.Selling.Tests
+namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 {
 	public class HotDogCartTestFixture : ObserverTestFixture<HotDogCartEvent>
 	{

@@ -3,7 +3,7 @@ using Assets.Code.Model.Selling.Events;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Assets.Code.Model.Selling.Tests
+namespace Assets.Code.Model.Selling.Tests.GrillTests
 {
 	public class RemoveCookedHotDogTests : GrillTestFixture
 	{
