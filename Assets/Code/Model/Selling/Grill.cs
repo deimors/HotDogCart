@@ -10,11 +10,7 @@ namespace Assets.Code.Model.Selling
 	{
 		private readonly ISubject<GrillEvent> _events = new Subject<GrillEvent>();
 		private readonly ISubject<TimeEvent> _timeEvents = new Subject<TimeEvent>();
-
-		public IObservable<GrillEvent> Events => _events;
-
-		public IObserver<TimeEvent> TimeObserver => _timeEvents;
-
+		
 		private readonly TimeSpan?[] _cookingSlots = new TimeSpan?[2];
 
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
@@ -26,6 +22,10 @@ namespace Assets.Code.Model.Selling
 				.Select(e => e.Duration)
 				.Subscribe(ProgressTime);
 		}
+
+		public IObservable<GrillEvent> Events => _events;
+
+		public IObserver<TimeEvent> TimeObserver => _timeEvents;
 
 		public void AddHotDog()
 		{

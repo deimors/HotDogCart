@@ -41,27 +41,7 @@ namespace Assets.Code.Model.Selling
 			
 			_saleActive.OnNext(false);
 		}
-
-		private IObservable<bool> HotDogsAvailable 
-			=> _grillEvents
-				.OfType<GrillEvent, CookedHotDogsAvailableEvent>()
-				.Select(_ => true)
-				.Merge(
-					_grillEvents
-						.OfType<GrillEvent, NoCookedHotDogsAvailableEvent>()
-						.Select(_ => false)
-				);
-
-		private IObservable<bool> CustomersAvailable 
-			=> _customersEvents
-				.OfType<CustomersEvent, LineNotEmptyEvent>()
-				.Select(_ => true)
-				.Merge(
-					_customersEvents
-						.OfType<CustomersEvent, LineEmptyEvent>()
-						.Select(_ => false)
-				);
-
+		
 		public IObservable<HotDogCartEvent> Events => _events;
 
 		public IObserver<CustomersEvent> CustomersObserver => _customersEvents;
@@ -93,6 +73,26 @@ namespace Assets.Code.Model.Selling
 			
 			_events.OnNext(new SaleCompletedEvent());
 		}
+
+		private IObservable<bool> HotDogsAvailable
+			=> _grillEvents
+				.OfType<GrillEvent, CookedHotDogsAvailableEvent>()
+				.Select(_ => true)
+				.Merge(
+					_grillEvents
+						.OfType<GrillEvent, NoCookedHotDogsAvailableEvent>()
+						.Select(_ => false)
+				);
+
+		private IObservable<bool> CustomersAvailable
+			=> _customersEvents
+				.OfType<CustomersEvent, LineNotEmptyEvent>()
+				.Select(_ => true)
+				.Merge(
+					_customersEvents
+						.OfType<CustomersEvent, LineEmptyEvent>()
+						.Select(_ => false)
+				);
 
 		private bool IsSaleActive => _remainingSaleTime.HasValue;
 
