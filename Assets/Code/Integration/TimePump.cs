@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Code.Model.Selling;
+using Assets.Code.Model.Selling.Events;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -18,15 +19,14 @@ namespace Assets.Code.Integration
 
 		[Inject]
 		public void Initialize()
-			=> Observable.EveryUpdate()
+		{
+			var timeEvents = Observable.EveryUpdate()
 				.Select(_ => Time.deltaTime * TimeScale)
 				.Select(deltaTime => TimeSpan.FromSeconds(deltaTime))
-				.Subscribe(ProgressTime);
+				.Select(duration => new TimeProgressedEvent(duration) as TimeEvent);
 
-		private void ProgressTime(TimeSpan span)
-		{
-			Cart.ProgressTime(span);
-			Grill.ProgressTime(span);
+			timeEvents.Subscribe(Cart.TimeObserver);
+			timeEvents.Subscribe(Grill.TimeObserver);
 		}
 	}
 }
