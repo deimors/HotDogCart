@@ -4,6 +4,7 @@ using Assets.Code.Model.Selling.Events;
 using UniRx;
 using UnityEngine;
 using Zenject;
+using Time = UnityEngine.Time;
 
 namespace Assets.Code.Integration
 {
