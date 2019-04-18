@@ -5,20 +5,23 @@ using Zenject;
 
 namespace Assets.Code.Infrastructure
 {
-	internal class CartToGrillBinding : IInitializable
+	internal class GrillBindings : IInitializable
 	{
-		private readonly HotDogCart _cart;
 		private readonly Grill _grill;
 
-		public CartToGrillBinding(HotDogCart cart, Grill grill)
-		{
-			_cart = cart;
-			_grill = grill;
-		}
+		private readonly Time _time;
+		private readonly HotDogCart _cart;
 
+		public GrillBindings(Grill grill, Time time, HotDogCart cart)
+		{
+			_grill = grill;
+			_time = time;
+			_cart = cart;
+		}
+		
 		public void Initialize()
 		{
-			_grill.Events.Subscribe(_cart.GrillObserver);
+			_time.Events.Subscribe(_grill.TimeObserver);
 			_cart.Events.OfType<HotDogCartEvent, SaleStartedEvent>().Subscribe(_ => _grill.RemoveCookedHotDog());
 		}
 	}

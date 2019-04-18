@@ -10,17 +10,16 @@ namespace Assets.Code.Infrastructure
 		public override void InstallBindings()
 		{
 			Container.Bind<Customers>().AsSingle().WithArguments(2).NonLazy();
-			
 			Container.Bind<HotDogCart>().AsSingle().WithArguments(TimeSpan.FromMinutes(1)).NonLazy();
-
 			Container.Bind<Grill>().AsSingle().NonLazy();
+			Container.Bind<Time>().AsSingle().NonLazy();
 
 			Container.Bind<TimePump>().AsSingle().NonLazy();
-
 			Container.Bind<HotDogCartCustomerGenerator>().AsSingle().NonLazy();
 
-			Container.Bind<IInitializable>().To<CartToCustomersBinding>().AsSingle();
-			Container.Bind<IInitializable>().To<CartToGrillBinding>().AsSingle();
+			Container.Bind<IInitializable>().To<CustomersBinding>().AsSingle();
+			Container.Bind<IInitializable>().To<HotDogCartBindings>().AsSingle();
+			Container.Bind<IInitializable>().To<GrillBindings>().AsSingle();
 		}
 	}
 }
