@@ -11,7 +11,7 @@ namespace Assets.Code.Model.Selling
 
 		public void Progress(TimeSpan duration)
 		{
-			_events.OnNext(new TimeProgressedEvent(TimeSpan.FromMinutes(3)));
+			_events.OnNext(new TimeProgressedEvent(duration));
 		}
 	}
 }
