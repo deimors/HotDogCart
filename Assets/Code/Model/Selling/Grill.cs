@@ -15,7 +15,7 @@ namespace Assets.Code.Model.Selling
 
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
 
-		public Grill()
+		public Grill(int slotCount)
 		{
 			_timeEvents
 				.OfType<TimeEvent, TimeProgressedEvent>()

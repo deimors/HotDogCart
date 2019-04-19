@@ -12,10 +12,12 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 
 		protected abstract TimeSpan CookTime { get; }
 
+		protected virtual int SlotCount { get; } = 2;
+
 		[SetUp]
 		public override void Setup()
 		{
-			_grill = new Grill();
+			_grill = new Grill(SlotCount);
 
 			base.Setup();
 		}
