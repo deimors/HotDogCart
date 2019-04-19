@@ -11,15 +11,13 @@ namespace Assets.Code.Presentation
 	public class TimeTextPresenter : MonoBehaviour
 	{
 		public Text TimeText;
-
-		public DateTime StartDate;
-
+		
 		[Inject]
 		public void Initialize(Time time)
 		{
 			time.Events
 				.OfType<TimeEvent, TimeProgressedEvent>()
-				.Select(e => (StartDate + e.Duration).ToString("HH:mm:ss tt"))
+				.Select(e => e.CurrentTime.ToString("HH:mm tt"))
 				.Subscribe(currentTime => TimeText.text = currentTime);
 		}
 	}
