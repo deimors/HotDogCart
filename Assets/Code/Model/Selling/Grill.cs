@@ -11,12 +11,14 @@ namespace Assets.Code.Model.Selling
 		private readonly ISubject<GrillEvent> _events = new Subject<GrillEvent>();
 		private readonly ISubject<TimeEvent> _timeEvents = new Subject<TimeEvent>();
 		
-		private readonly TimeSpan?[] _cookingSlots = new TimeSpan?[2];
+		private readonly TimeSpan?[] _cookingSlots;
 
 		private static readonly TimeSpan CookTime = TimeSpan.FromMinutes(5);
 
 		public Grill(int slotCount)
 		{
+			_cookingSlots = new TimeSpan?[slotCount];
+
 			_timeEvents
 				.OfType<TimeEvent, TimeProgressedEvent>()
 				.Select(e => e.Duration)
