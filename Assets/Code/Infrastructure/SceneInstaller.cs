@@ -11,7 +11,7 @@ namespace Assets.Code.Infrastructure
 		{
 			Container.Bind<Customers>().AsSingle().WithArguments(2).NonLazy();
 			Container.Bind<HotDogCart>().AsSingle().WithArguments(TimeSpan.FromMinutes(1)).NonLazy();
-			Container.Bind<Grill>().AsSingle().NonLazy();
+			Container.Bind<Grill>().AsSingle().WithArguments(5).NonLazy();
 			Container.Bind<Time>().AsSingle().NonLazy();
 
 			Container.Bind<TimePump>().AsSingle().NonLazy();
