@@ -24,7 +24,7 @@ namespace Assets.Code.Model.Selling.Tests.HotDogCartTests
 			=> _pos.CustomersObserver.OnNext(customersEvent);
 
 		protected void Arrange_TimeProgressed(TimeSpan duration)
-			=> Arrange_TimeEvent(new TimeProgressedEvent(duration));
+			=> Arrange_TimeEvent(new TimeProgressedEvent(duration, default(DateTime)));
 
 		private void Arrange_TimeEvent(TimeEvent timeEvent)
 			=> _pos.TimeObserver.OnNext(timeEvent);

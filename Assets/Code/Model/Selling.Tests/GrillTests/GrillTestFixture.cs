@@ -23,7 +23,7 @@ namespace Assets.Code.Model.Selling.Tests.GrillTests
 		protected override IObservable<GrillEvent> Observable => _grill.Events;
 
 		protected void Arrange_TimeProgressed(TimeSpan duration)
-			=> Arrange_TimeEvent(new TimeProgressedEvent(duration));
+			=> Arrange_TimeEvent(new TimeProgressedEvent(duration, default(DateTime)));
 
 		protected void Arrange_TimeEvent(TimeEvent timeEvent)
 			=> _grill.TimeObserver.OnNext(timeEvent);

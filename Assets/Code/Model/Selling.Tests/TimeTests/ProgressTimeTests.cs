@@ -13,7 +13,7 @@ namespace Assets.Code.Model.Selling.Tests.TimeTests
 
 			Act_Progress(duration);
 
-			Assert_EventObserved(new TimeProgressedEvent(duration));
+			Assert_EventObserved(new TimeProgressedEvent(duration, DateTime.MinValue + duration));
 		}
 	}
 }
